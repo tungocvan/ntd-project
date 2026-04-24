@@ -11,8 +11,8 @@ class AuthController extends Controller
     {
         // Nếu đã login rồi thì đá về dashboard
         if (Auth::guard('admin')->check()) {
-            return redirect()->route('admin.dashboard');
-        }
+            return redirect()->route('admin.admission.index');
+        } 
         return view('Admin::auth.login');
     }
 

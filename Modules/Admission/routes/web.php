@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Admission\Http\Controllers\AdmissionController;
+use Modules\Auth\Http\Controllers\AuthController;
+
+Route::middleware(['web'])->group(function () {
+       Route::get('/', [AuthController::class, 'login'])->name('admin.login');
+});
 
 Route::middleware(['web','auth:admin'])
     ->prefix('/admin/admission')
@@ -26,3 +31,4 @@ Route::middleware(['web','auth:admin'])
     Route::get('/download-word/{id}', [AdmissionController::class, 'downloadDocx'])->name('download-word');
 
 });
+

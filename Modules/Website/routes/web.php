@@ -53,7 +53,7 @@ Route::middleware(['web'])->group(function () use ($websitePrefix) {
     // ====================================================
 
     // Trang chủ
-    Route::get('/', [WebsiteController::class, 'home'])->name('home');
+    Route::get('/website/', [WebsiteController::class, 'home'])->name('home');
     Route::get('/help', [WebsiteController::class, 'help'])->name('help');
 
     // Sản phẩm
