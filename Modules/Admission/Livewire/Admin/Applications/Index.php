@@ -19,7 +19,7 @@ class Index extends Component
 
     public $perPage = 10;
 
-    public $selected = [];
+    public $selected = []; 
     public $selectAll = false;
 
     protected $queryString = [

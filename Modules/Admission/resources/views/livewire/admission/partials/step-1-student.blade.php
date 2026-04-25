@@ -27,7 +27,7 @@
                 </label>
                 <input type="text"
                        wire:model.lazy="form.HoVaTenHocSinh"
-                       x-on:input="$el.value = $el.value.toUpperCase()"
+                       x-on:input="$el.value"
                        class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 

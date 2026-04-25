@@ -6,7 +6,7 @@ use Modules\Admin\Http\Controllers\MenuController;
 use Modules\Admin\Http\Controllers\ProfileController;
 
 Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group(function () { // Sau này thêm middleware admin sau
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     // === QUẢN LÝ MENU ===
     Route::prefix('menus')->name('menus.')->group(function () {
         Route::get('/', [MenuController::class, 'index'])->name('index');
@@ -16,3 +16,4 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group
 
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 });
+ 

@@ -8,8 +8,10 @@ use Modules\Admission\Services\AdmissionService;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Admission\Exports\ApplicationsExport;
+//se Modules\Admission\Exports\ApplicationsExport;
 use Modules\Admission\Imports\ApplicationsImport;
+use Illuminate\Support\Facades\Storage;
+use Modules\Admission\Models\AdmissionApplication;
 
 
 class AdmissionController extends Controller
@@ -154,5 +156,21 @@ class AdmissionController extends Controller
         Excel::import(new ApplicationsImport, $request->file('file'));
 
         return back()->with('success', 'Import thành công');
+    }
+    public function download($id, $type)
+    {
+        $item = AdmissionApplication::findOrFail($id);
+
+        $path = match ($type) {
+            'pdf' => $item->pdf_path,
+            'word' => $item->word_path,
+            default => null,
+        };
+
+        if (!$path || !Storage::disk('local')->exists($path)) {
+            abort(404, 'File không tồn tại');
+        }
+
+        return response()->download(storage_path('app/' . $path));
     }
 }

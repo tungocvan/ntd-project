@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admission\Http\Controllers\AdmissionController;
 use Modules\Auth\Http\Controllers\AuthController;
 
-Route::middleware(['web'])->group(function () {
-       Route::get('/', [AuthController::class, 'login'])->name('admin.login');
+Route::middleware(['web','auth:admin'])->group(function () {
+       Route::get('/', [AdmissionController::class, 'adminIndex'])->name('admin.dashboard');
+       //Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::middleware(['web','auth:admin'])
@@ -29,6 +30,8 @@ Route::middleware(['web','auth:admin'])
     Route::get('/register', [AdmissionController::class, 'index'])->name('register');
     Route::get('/download-pdf/{id}', [AdmissionController::class, 'downloadPdf'])->name('download-pdf');
     Route::get('/download-word/{id}', [AdmissionController::class, 'downloadDocx'])->name('download-word');
+    Route::get('/{id}/download/{type}', [AdmissionController::class, 'download'])
+    ->name('download');
 
 });
 

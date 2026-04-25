@@ -18,7 +18,7 @@
     <div class="flex items-center justify-center h-16 bg-gray-900 border-b border-gray-800 shadow-sm transition-all duration-300">
 
         <div x-show="sidebarOpen" x-transition.opacity.duration.300ms class="flex items-center gap-2 whitespace-nowrap overflow-hidden">
-            <span class="text-xl font-bold tracking-wider uppercase text-indigo-500">Master<span class="text-white">Admin</span></span>
+            <span class="text-xl font-bold tracking-wider uppercase text-indigo-500">NGUYỄN THỊ ĐỊNH<span class="text-white"></span></span>
         </div>
 
         <div x-show="!sidebarOpen" x-transition.opacity.duration.300ms class="text-xl font-bold text-indigo-500">

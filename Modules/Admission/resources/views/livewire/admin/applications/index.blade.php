@@ -1,4 +1,5 @@
 <div class="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+    
     {{-- SUCCESS --}}
     @if (session('success'))
         <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm">
@@ -12,7 +13,6 @@
             {{ session('error') }}
         </div>
     @endif
-    {{-- HEADER --}}
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
             Hồ sơ tuyển sinh
@@ -223,6 +223,23 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
               hover:bg-blue-50 rounded-lg transition">
                                     Chi tiết
                                 </a>
+                                
+                                {{-- DOWNLOAD PDF --}}
+                                
+                                @if ($item->pdf_path && Storage::disk('local')->exists($item->pdf_path))
+                                    <a href="{{ route('admission.download', ['id' => $item->id, 'type' => 'pdf']) }}"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition">
+                                        PDF
+                                    </a>
+                                @endif
+
+                                {{-- DOWNLOAD WORD --}}
+                                @if ($item->word_path && Storage::disk('local')->exists($item->word_path))
+                                    <a href="{{ route('admission.download', ['id' => $item->id, 'type' => 'word']) }}"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                                        Word
+                                    </a>
+                                @endif
                                 <button wire:click="delete({{ $item->id }})"
                                     class="text-rose-500 hover:text-rose-700 text-sm">
                                     Xóa
