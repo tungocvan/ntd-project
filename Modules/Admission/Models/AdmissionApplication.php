@@ -23,8 +23,12 @@ class AdmissionApplication extends Model
         'ton_giao',
         'sdt_enetviet',
         'noi_sinh',
+        'noi_sinh_px',
+        'noi_sinh_tt',
         'noi_dang_ky_khai_sinh',
         'que_quan',
+        'que_quan_px',
+        'que_quan_tt',
         // Bước 2: Địa chỉ
         'ttsn',
         'ttd',

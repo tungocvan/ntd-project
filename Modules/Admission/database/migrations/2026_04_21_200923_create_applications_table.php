@@ -22,8 +22,12 @@ return new class extends Migration {
             $table->string('ton_giao')->nullable();
             $table->string('sdt_enetviet')->nullable();
             $table->string('noi_sinh')->nullable();
+            $table->string('noi_sinh_px')->nullable();
+            $table->string('noi_sinh_tt')->nullable();
             $table->string('noi_dang_ky_khai_sinh')->nullable();
             $table->string('que_quan')->nullable();
+            $table->string('que_quan_px')->nullable();
+            $table->string('que_quan_tt')->nullable();
 
             // BƯỚC 2: Địa chỉ
             $table->string('ttsn')->nullable(); // Thường trú Số nhà

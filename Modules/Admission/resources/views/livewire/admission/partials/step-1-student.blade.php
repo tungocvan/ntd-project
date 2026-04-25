@@ -25,10 +25,8 @@
                 <label class="text-sm font-medium">
                     Họ và tên học sinh <span class="text-red-500">*</span>
                 </label>
-                <input type="text"
-                       wire:model.lazy="form.HoVaTenHocSinh"
-                       x-on:input="$el.value"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="text" wire:model.lazy="form.HoVaTenHocSinh" x-on:input="$el.value"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
             {{-- GIỚI TÍNH --}}
@@ -37,7 +35,7 @@
                     Giới tính
                 </label>
                 <select wire:model.defer="form.GioiTinh"
-                        class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
                     <option value="">-- Chọn --</option>
                     <option value="Nam">Nam</option>
                     <option value="Nữ">Nữ</option>
@@ -47,9 +45,8 @@
             {{-- NGÀY SINH --}}
             <div>
                 <label class="text-sm font-medium">Ngày sinh</label>
-                <input type="date"
-                       wire:model.defer="form.NgaySinh"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="date" wire:model.defer="form.NgaySinh"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
             {{-- CCCD --}}
@@ -57,13 +54,9 @@
                 <label class="text-sm font-medium">
                     Mã định danh <span class="text-red-500">*</span>
                 </label>
-                <input type="text"
-                       maxlength="12"
-                       inputmode="numeric"
-                       pattern="[0-9]*"
-                       wire:model.defer="form.MaDinhDanh"
-                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="text" maxlength="12" inputmode="numeric" pattern="[0-9]*"
+                    wire:model.defer="form.MaDinhDanh" oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
             {{-- SĐT --}}
@@ -71,9 +64,8 @@
                 <label class="text-sm font-medium">
                     SĐT (EnetViet)
                 </label>
-                <input type="text"
-                       wire:model.defer="form.SDTEnetViet"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="text" wire:model.defer="form.SDTEnetViet"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
         </div>
@@ -92,9 +84,7 @@
             {{-- DÂN TỘC --}}
             <div>
                 <label class="text-sm font-medium">Dân tộc</label>
-                <x-select-search id="dan_toc"
-                                 wire:model="form.DanToc"
-                                 placeholder="Chọn dân tộc...">
+                <x-select-search id="dan_toc" wire:model="form.DanToc" placeholder="Chọn dân tộc...">
                     <option value="">-- Chọn --</option>
                     @foreach ($ethnicities as $et)
                         <option value="{{ $et['value'] }}">{{ $et['value'] }}</option>
@@ -105,17 +95,14 @@
             {{-- QUỐC TỊCH --}}
             <div>
                 <label class="text-sm font-medium">Quốc tịch</label>
-                <input type="text"
-                       wire:model.defer="form.QuocTich"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="text" wire:model.defer="form.QuocTich"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
             {{-- TÔN GIÁO --}}
             <div>
                 <label class="text-sm font-medium">Tôn giáo</label>
-                <x-select-search id="ton_giao"
-                                 wire:model="form.TonGiao"
-                                 placeholder="Chọn tôn giáo...">
+                <x-select-search id="ton_giao" wire:model="form.TonGiao" placeholder="Chọn tôn giáo...">
                     <option value="">-- Chọn --</option>
                     @foreach ($religions as $rl)
                         <option value="{{ $rl['value'] }}">{{ $rl['value'] }}</option>
@@ -141,49 +128,88 @@
                 <label class="text-sm font-medium">
                     Nơi sinh (Tỉnh/TP)
                 </label>
-                <x-select-search id="noi_sinh"
-                                 wire:model="form.NoiSinh"
-                                 placeholder="Chọn nơi sinh...">
+                <x-select-search id="noi_sinh" wire:model="form.NoiSinhTt" placeholder="Chọn nơi sinh...">
                     <option value="">-- Chọn --</option>
                     @foreach ($provinces as $p)
                         <option value="{{ $p['province_name'] }}">{{ $p['province_name'] }}</option>
                     @endforeach
                 </x-select-search>
             </div>
+            <div>
+                <label class="text-sm font-medium">
+                    Nơi sinh (Phường/Xã)
+                </label>
+                <x-select-search id="noi_sinh_px" options-wire="noi_sinh_wards" wire:model.live="form.NoiSinhPx"
+                    placeholder="Phường / Xã">
+                    <option value="">-- Chọn --</option>
+
+                    @if (!empty($noi_sinh_wards))
+                        @foreach ($noi_sinh_wards as $w)
+                            <option value="{{ $w['ward_name'] }}">
+                                {{ $w['ward_name'] }}
+                            </option>
+                        @endforeach
+                    @endif
+                </x-select-search>
+            </div>
+
+            <div>
+                <label class="text-sm font-medium">
+                    Nơi sinh chi tiết:  {{ $form['NoiSinhPx'].", " }}{{ $form['NoiSinhTt']   }}
+                </label>                
+            </div>
 
             {{-- CHECKBOX COPY --}}
             <label class="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox"
-                       wire:model="copyNoiSinhToQueQuan"
-                       class="rounded border-gray-300">
+                <input type="checkbox" wire:model.live="copyNoiSinhToQueQuan" class="rounded border-gray-300">
                 Quê quán giống nơi sinh
             </label>
 
             {{-- QUÊ QUÁN --}}
             <div>
                 <label class="text-sm font-medium">
-                    Quê quán
+                    Quê quán Tỉnh/TP
                 </label>
-                <x-select-search id="que_quan"
-                                 wire:model="form.QueQuan"
-                                 placeholder="Chọn quê quán...">
+                <x-select-search id="que_quan" wire:model="form.QueQuanTt" placeholder="Chọn quê quán...">
                     <option value="">-- Chọn --</option>
                     @foreach ($provinces as $p)
                         <option value="{{ $p['province_name'] }}">{{ $p['province_name'] }}</option>
                     @endforeach
                 </x-select-search>
             </div>
+            <div>
+                <label class="text-sm font-medium">
+                    Quê quán Phường/Xã
+                </label>
+                <x-select-search id="que_quan_px" options-wire="que_quan_wards" wire:model.live="form.QueQuanPx"
+                    placeholder="Phường / Xã">
+                    <option value="">-- Chọn --</option>
+
+                    @if (!empty($que_quan_wards))
+                        @foreach ($que_quan_wards as $w)
+                            <option value="{{ $w['ward_name'] }}">
+                                {{ $w['ward_name'] }}
+                            </option>
+                        @endforeach
+                    @endif
+                </x-select-search>
+            </div>            
 
             {{-- NƠI KHAI SINH --}}
             <div>
                 <label class="text-sm font-medium">
                     Nơi đăng ký khai sinh
                 </label>
-                <input type="text"
-                       wire:model.defer="form.NoiDangKyKhaiSinh"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                <input type="text" wire:model.live="form.NoiDangKyKhaiSinh"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
 
+            <div>
+                <label class="text-sm font-medium">
+                    Quê quán chi tiết: {{ $form['NoiDangKyKhaiSinh'].", "  }}{{ $form['QueQuanPx'].", "  }}{{ $form['QueQuanTt']  }}
+                </label>                
+            </div>
+            
         </div>
     </div>
 

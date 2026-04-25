@@ -37,7 +37,7 @@
                    focus:outline-none focus:ring-2 focus:ring-green-300
                    transition flex items-center justify-center gap-2"
         >
-            ✔ Hoàn tất & Xuất đơn
+            ✔ Hoàn tất
         </button>
     @endif
 

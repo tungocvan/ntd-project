@@ -16,6 +16,8 @@ class RegistrationForm extends Component
     public $provinces = [];
     public $tt_wards = [];
     public $ht_wards = [];
+    public $noi_sinh_wards = [];
+    public $que_quan_wards = [];
     public $ethnicities = [];
     public $religions = [];
     public $copyNoiSinhToQueQuan = false;
@@ -36,8 +38,12 @@ class RegistrationForm extends Component
         'TonGiao' => 'Không',
         'SDTEnetViet' => '',
         'NoiSinh' => '',
+        'NoiSinhPx'  => '',
+        'NoiSinhTt'  => '',
         'NoiDangKyKhaiSinh' => '',
         'QueQuan' => '',
+        'QueQuanPx' => '',
+        'QueQuanTt' => '',
 
         // STEP 2
         'TTSN' => '',
@@ -66,14 +72,14 @@ class RegistrationForm extends Component
         // STEP 4
         'HoTenCha' => '',
         'NamSinhCha' => '',
-        'NgheNghiepCha' => '',
+        'NgheNghiepCha' => 'LĐTD',
         'ChucVuCha' => '',
         'DienThoaiCha' => '',
         'CCCDCha' => '',
 
         'HoTenMe' => '',
         'NamSinhMe' => '',
-        'NgheNghiepMe' => '',
+        'NgheNghiepMe' => 'LĐTD',
         'ChucVuMe' => '',
         'DienThoaiMe' => '',
         'CCCDMe' => '',
@@ -104,10 +110,15 @@ class RegistrationForm extends Component
 //         'MaDinhDanh' => '079120000001',
 //         'QuocTich' => 'Việt Nam',
 //         'TonGiao' => 'Không',
-//         'SDTEnetViet' => '0908123456',
-//         'NoiSinh' => 'Tp Hồ Chí Minh',
-//         'NoiDangKyKhaiSinh' => 'UBND Quận 7',
-//         'QueQuan' => 'Tp Hồ Chí Minh',
+//         'SDTEnetViet' => '0908123456',        
+
+//         'NoiSinh' => '',
+//         'NoiSinhPx'  => '',
+//         'NoiSinhTt'  => '',
+//         'NoiDangKyKhaiSinh' => '',
+//         'QueQuan' => '',
+//         'QueQuanPx' => '',
+//         'QueQuanTt' => '',
 
 //         // STEP 2
 //         'TTSN' => '45',
@@ -136,7 +147,7 @@ class RegistrationForm extends Component
 //         // STEP 4
 //         'HoTenCha' => 'Nguyễn Văn Hùng',
 //         'NamSinhCha' => '1990',
-//         'NgheNghiepCha' => 'Kỹ sư',
+//         'NgheNghiepCha' => 'LĐTD',
 //         'ChucVuCha' => '',
 //         'DienThoaiCha' => '0909000001',
 //         'CCCDCha' => '079088880001
@@ -144,7 +155,7 @@ class RegistrationForm extends Component
 
 //         'HoTenMe' => 'Trần Thị Mai',
 //         'NamSinhMe' => '1992',
-//         'NgheNghiepMe' => 'Kinh doanh',
+//         'NgheNghiepMe' => 'LĐTD',
 //         'ChucVuMe' => '',
 //         'DienThoaiMe' => '0909000002',
 //         'CCCDMe' => '079088880002',
@@ -209,8 +220,12 @@ class RegistrationForm extends Component
                 'TonGiao' => $app->ton_giao,
                 'SDTEnetViet' => $app->sdt_enetviet,
                 'NoiSinh' => $app->noi_sinh,
+                'NoiSinhPx' => $app->noi_sinh_px,
+                'NoiSinhTt' => $app->noi_sinh_tt,
                 'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,
                 'QueQuan' => $app->que_quan,
+                'QueQuanPx' => $app->que_quan_px,
+                'QueQuanTt' => $app->que_quan_tt,
 
                 // STEP 2
                 'TTSN' => $app->ttsn,
@@ -266,6 +281,8 @@ class RegistrationForm extends Component
             // Load wards nếu có
             $this->updated('form.TTTTP');
             $this->updated('form.HTTTP');
+            $this->updated('form.NoiSinhTt');
+            $this->updated('form.QueQuanTt');
         }
     }
 
@@ -278,12 +295,22 @@ class RegistrationForm extends Component
         if ($field === 'form.HTTTP') {
             $this->ht_wards = AdmissionLocation::where('province_name', $this->form['HTTTP'])->get()->toArray();
         }
+
+        if ($field === 'form.NoiSinhTt') {
+            $this->noi_sinh_wards = AdmissionLocation::where('province_name', $this->form['NoiSinhTt'])->get()->toArray();
+        }
+
+        if ($field === 'form.QueQuanTt') {
+            $this->que_quan_wards = AdmissionLocation::where('province_name', $this->form['QueQuanTt'])->get()->toArray();
+        }
     }
 
     public function updatedCopyNoiSinhToQueQuan($value)
     {
         if ($value) {
-            $this->form['QueQuan'] = $this->form['NoiSinh'];
+        
+            $this->form['QueQuanPx'] = $this->form['NoiSinhPx'];
+            $this->form['QueQuanTt'] = $this->form['NoiSinhTt'];    
         }
     }
     // ================= SAME ADDRESS =================

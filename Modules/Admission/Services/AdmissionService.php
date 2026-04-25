@@ -58,9 +58,14 @@ class AdmissionService
             'quoc_tich'          => $formData['QuocTich'] ?? null,
             'ton_giao'           => $formData['TonGiao'] ?? null,
             'sdt_enetviet'       => $formData['SDTEnetViet'] ?? null,
-            'noi_sinh'           => $formData['NoiSinh'] ?? null,
+            'noi_sinh_px'        => $formData['NoiSinhPx'] ?? null,
+            'noi_sinh_tt'        => $formData['NoiSinhTt'] ?? null,
             'noi_dang_ky_khai_sinh' => $formData['NoiDangKyKhaiSinh'] ?? null,
-            'que_quan'           => $formData['QueQuan'] ?? null,
+            'noi_sinh'           => $formData['NoiDangKyKhaiSinh'] . ", " . $formData['NoiSinhPx'] . ", " . $formData['NoiSinhTt'] ?? '',
+
+            'que_quan_px'        => $formData['QueQuanPx'] ?? null,
+            'que_quan_tt'        => $formData['QueQuanTt'] ?? null,
+            'que_quan'           => $formData['QueQuanPx'] . ", " . $formData['QueQuanTt'] ?? '',
 
             // 2. Địa chỉ
             'ttsn'               => $formData['TTSN'] ?? null,
@@ -140,8 +145,12 @@ class AdmissionService
             'TonGiao'           => $app->ton_giao,
             'SDTEnetViet'       => $app->sdt_enetviet,
             'NoiSinh'           => $app->noi_sinh,
+            'NoiSinhPx'         => $app->noi_sinh_px,
+            'NoiSinhTt'         => $app->noi_sinh_tt,
             'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,
             'QueQuan'           => $app->que_quan,
+            'QueQuanPx'         => $app->que_quan_px,
+            'QueQuanTt'         => $app->que_quan_tt,
             'TTSN'              => $app->ttsn ?? '',
             'TTD'               => $app->ttd ?? '',
             'TTKP'              => $app->ttkp ?? '',
@@ -195,8 +204,8 @@ class AdmissionService
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('ho_va_ten_hoc_sinh', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('ma_dinh_danh', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('mhs', 'like', '%' . $filters['search'] . '%');
+                    ->orWhere('ma_dinh_danh', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('mhs', 'like', '%' . $filters['search'] . '%');
             });
         }
         if (!empty($filters['status'])) {
