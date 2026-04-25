@@ -127,7 +127,7 @@ class AdmissionService
             'nguoi_lam_don'             => $formData['NguoiLamDon'] ?? null,
         ];
     }
-
+ 
     /**
      * DỮ LIỆU ĐỔ VÀO WORD (Sử dụng key của file Word mẫu)
      */
@@ -145,7 +145,7 @@ class AdmissionService
             'TonGiao'           => $app->ton_giao,
             'SDTEnetViet'       => $app->sdt_enetviet,
             'NoiSinh'           => $app->noi_sinh,
-            'NoiSinhPx'         => $app->noi_sinh_px,
+            'NoiSinhPx'         => $app->noi_sinh_px, 
             'NoiSinhTt'         => $app->noi_sinh_tt,
             'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,
             'QueQuan'           => $app->que_quan,

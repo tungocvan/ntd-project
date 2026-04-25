@@ -61,8 +61,12 @@ class ApplicationsImport implements
                 'sdt_enetviet' => $row['sdt_enetviet'] ?? null,
 
                 'noi_sinh' => $row['noi_sinh'] ?? null,
+                'noi_sinh_px' => $row['noi_sinh_px'] ?? null,
+                'noi_sinh_tt' => $row['noi_sinh_tt'] ?? null,
                 'noi_dang_ky_khai_sinh' => $row['noi_dang_ky_khai_sinh'] ?? null,
                 'que_quan' => $row['que_quan'] ?? null,
+                'que_quan_px' => $row['que_quan_px'] ?? null,
+                'que_quan_tt' => $row['que_quan_tt'] ?? null,
 
                 // Địa chỉ
                 'ttsn' => $row['ttsn'] ?? null,
