@@ -60,7 +60,7 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
         </select>
     </div>
 
-
+    @can('create_admission')
     <div
         class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
@@ -117,6 +117,7 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
         </form>
     </div>
 
+    
     {{-- BULK BAR --}}
     @if (count($selected) > 0)
         <div class="flex justify-between items-center bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
@@ -137,7 +138,7 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
             </div>
         </div>
     @endif
-
+    @endcan    
     {{-- TABLE --}}
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
@@ -194,16 +195,17 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                         <span class="px-2.5 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">
                                             Chờ duyệt
                                         </span>
-
-                                        <button wire:click="approve({{ $item->id }})"
-                                            class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">
-                                            Duyệt
-                                        </button>
+                                        @can('create_admission')
+                                            <button wire:click="approve({{ $item->id }})"
+                                                class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">
+                                                Duyệt
+                                            </button>                                        
 
                                         <button wire:click="reject({{ $item->id }})"
                                             class="text-rose-600 hover:text-rose-700 text-xs font-medium">
                                             Từ chối
                                         </button>
+                                        @endcan
                                     </div>
                                 @elseif($item->status === 'approved')
                                     <span class="px-2.5 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-full">
@@ -240,10 +242,15 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                         Word
                                     </a>
                                 @endif
+                                
+
+                                {{-- DELETE --}}
+                                 @can('create_admission')
                                 <button wire:click="delete({{ $item->id }})"
                                     class="text-rose-500 hover:text-rose-700 text-sm">
                                     Xóa
                                 </button>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
