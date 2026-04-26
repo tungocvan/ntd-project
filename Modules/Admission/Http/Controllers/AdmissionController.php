@@ -42,6 +42,10 @@ class AdmissionController extends Controller
     {
         return view('Admission::pages.admin.create');
     }
+    public function dvhc()
+    {
+        return view('Admission::pages.admin.dvhc');
+    }
 
     /**
      * Giao diện chỉnh sửa đơn (Admin CRUD)

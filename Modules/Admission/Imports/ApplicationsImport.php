@@ -3,161 +3,175 @@
 namespace Modules\Admission\Imports;
 
 use Modules\Admission\Models\AdmissionApplication;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;;
-
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
-
-use Maatwebsite\Excel\Validators\Failure;
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
-class ApplicationsImport implements
-    ToModel,
+use Maatwebsite\Excel\Concerns\{
+    ToCollection,
     WithHeadingRow,
-    WithValidation,
-    SkipsOnFailure,
+    SkipsEmptyRows
+};
+
+use Illuminate\Support\Collection;
+
+class ApplicationsImport implements
+    ToCollection,
+    WithHeadingRow,
     SkipsEmptyRows
 {
-    /**
-     * MAIN IMPORT
-     */
-    public function model(array $row)
+    protected array $exceptFields = [
+        'id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    public function collection(Collection $rows)
     {
-        try {
+        DB::transaction(function () use ($rows) {
 
-            // 🔥 LOG RAW (debug khi cần)
-            Log::info('IMPORT RAW ROW', $row);
+            foreach ($rows as $index => $row) {
 
-            // =========================
-            // 🔥 NORMALIZE DATA
-            // =========================
+                try {
 
-            $gioiTinh = $this->normalizeGender($row['gioi_tinh'] ?? null);
-            $status   = $this->normalizeStatus($row['status'] ?? null);
+                    $row = $row->toArray();
+                    Log::info('IMPORT ROW', ['row' => $row]);
 
-            $ngaySinh = $this->parseDate($row['ngay_sinh'] ?? null);
-            $ngayDon  = $this->parseDate($row['ngay_lam_don'] ?? null) ?? now();
+                    $data = [];
 
-            // =========================
-            // 🔥 BUILD DATA
-            // =========================
+                    foreach ($row as $key => $value) {
 
-            $data = [
-                'mhs' => $row['mhs'] ?? null,
-                'status' => $status,
+                        $column = $this->normalizeColumn($key);
 
-                'ho_va_ten_hoc_sinh' => $row['ho_va_ten_hoc_sinh'] ?? null,
-                'gioi_tinh' => $gioiTinh,
-                'ngay_sinh' => $ngaySinh,
+                        if (in_array($column, $this->exceptFields)) {
+                            continue;
+                        }
 
-                'dan_toc' => $row['dan_toc'] ?? null,
-                'ma_dinh_danh' => $row['ma_dinh_danh'] ?? null,
-                'quoc_tich' => $row['quoc_tich'] ?? null,
-                'ton_giao' => $row['ton_giao'] ?? null,
-                'sdt_enetviet' => $row['sdt_enetviet'] ?? null,
+                        // ❗ bỏ qua null → không overwrite
+                        if ($value === null || $value === '') {
+                            continue;
+                        }
 
-                'noi_sinh' => $row['noi_sinh'] ?? null,
-                'noi_sinh_px' => $row['noi_sinh_px'] ?? null,
-                'noi_sinh_tt' => $row['noi_sinh_tt'] ?? null,
-                'noi_dang_ky_khai_sinh' => $row['noi_dang_ky_khai_sinh'] ?? null,
-                'que_quan' => $row['que_quan'] ?? null,
-                'que_quan_px' => $row['que_quan_px'] ?? null,
-                'que_quan_tt' => $row['que_quan_tt'] ?? null,
+                        $data[$column] = $this->transformValue($column, $value);
+                    }
 
-                // Địa chỉ
-                'ttsn' => $row['ttsn'] ?? null,
-                'ttd' => $row['ttd'] ?? null,
-                'ttkp' => $row['ttkp'] ?? null,
-                'ttpx' => $row['ttpx'] ?? null,
-                'ttttp' => $row['ttttp'] ?? null,
-                'dia_chi_thuong_tru' => $row['dia_chi_thuong_tru'] ?? null,
+                    // =========================
+                    // 🔥 KEY CHECK (BẮT BUỘC)
+                    // =========================
 
-                'htsn' => $row['htsn'] ?? null,
-                'htd' => $row['htd'] ?? null,
-                'htkp' => $row['htkp'] ?? null,
-                'htpx' => $row['htpx'] ?? null,
-                'htttp' => $row['htttp'] ?? null,
-                'noi_o_hien_tai' => $row['noi_o_hien_tai'] ?? null,
+                    $key = $data['ma_dinh_danh']
+                        ?? $data['mhs']
+                        ?? null;
 
-                // JSON
-                'kha_nang_hoc_sinh' => $this->parseJson($row['kha_nang_hoc_sinh'] ?? null),
-                'suc_khoe_can_luu_y' => $this->parseJson($row['suc_khoe_can_luu_y'] ?? null),
+                    if (!$key) {
+                        Log::warning('SKIP - NO KEY', [
+                            'row_index' => $index,
+                            'row' => $row
+                        ]);
+                        continue;
+                    }
 
-                // Phụ huynh
-                'ho_ten_cha' => $row['ho_ten_cha'] ?? null,
-                'dien_thoai_cha' => $row['dien_thoai_cha'] ?? null,
+                    // =========================
+                    // 🔥 FIND EXISTING
+                    // =========================
 
-                'ho_ten_me' => $row['ho_ten_me'] ?? null,
-                'dien_thoai_me' => $row['dien_thoai_me'] ?? null,
+                    $record = AdmissionApplication::where('ma_dinh_danh', $key)
+                        ->orWhere('mhs', $key)
+                        ->first();
 
-                'ho_ten_nguoi_giam_ho' => $row['ho_ten_nguoi_giam_ho'] ?? null,
-                'dien_thoai_giam_ho' => $row['dien_thoai_giam_ho'] ?? null,
+                    if ($record) {
 
-                // Đăng ký
-                'loai_lop_dang_ky' => $row['loai_lop_dang_ky'] ?? null,
-                'ngay_lam_don' => $ngayDon,
-                'nguoi_lam_don' => $row['nguoi_lam_don'] ?? null,
-            ];
+                        // ✅ CHỈ UPDATE FIELD CÓ TRONG FILE
+                        foreach ($data as $field => $value) {
+                            $record->$field = $value;
+                        }
 
-            // 🔥 LOG FINAL DATA
-            Log::info('IMPORT FINAL DATA', $data);
+                        $record->save();
 
-            // =========================
-            // 🔥 UPSERT
-            // =========================
+                        Log::info('UPDATED', [
+                            'id' => $record->id,
+                            'key' => $key
+                        ]);
 
-            return AdmissionApplication::updateOrCreate(
-                ['mhs' => $data['mhs']],
-                $data
-            );
-        } catch (\Throwable $e) {
-            Log::error('IMPORT ERROR', [
-                'row' => $row,
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
+                    } else {
 
-    /**
-     * VALIDATION
-     */
-    public function rules(): array
-    {
-        return [
-            '*.mhs' => ['required'],
-            '*.ho_va_ten_hoc_sinh' => ['required', 'string'],
-            '*.gioi_tinh' => ['nullable'],
-            '*.status' => ['nullable'],
-        ];
-    }
+                        AdmissionApplication::create($data);
 
-    /**
-     * VALIDATION FAIL LOG
-     */
-    public function onFailure(Failure ...$failures)
-    {
-        foreach ($failures as $failure) {
-            Log::error('IMPORT VALIDATION FAIL', [
-                'row' => $failure->row(),
-                'errors' => $failure->errors(),
-                'values' => $failure->values(),
-            ]);
-        }
+                        Log::info('CREATED', [
+                            'key' => $key
+                        ]);
+                    }
+
+                } catch (\Throwable $e) {
+
+                    Log::error('IMPORT ERROR', [
+                        'row_index' => $index,
+                        'error' => $e->getMessage(),
+                        'row' => $row
+                    ]);
+
+                    // ❗ KHÔNG throw → không làm chết toàn bộ file
+                    continue;
+                }
+            }
+        });
     }
 
     /**
      * =========================
-     * HELPERS
+     * TRANSFORM
      * =========================
      */
+
+    protected function transformValue($column, $value)
+    {
+        if ($column === 'gioi_tinh') {
+            return $this->normalizeGender($value);
+        }
+
+        if ($column === 'status') {
+            return $this->normalizeStatus($value);
+        }
+
+        if ($this->isDateField($column)) {
+            return $this->parseDate($value);
+        }
+
+        if ($this->isArrayField($column)) {
+            return $this->parseJson($value);
+        }
+
+        return $value;
+    }
+
+    protected function normalizeColumn($key)
+    {
+        return Str::of($key)
+            ->lower()
+            ->replace(' ', '_')
+            ->toString();
+    }
+
+    protected function isDateField($column): bool
+    {
+        return str_contains($column, 'ngay') ||
+               str_contains($column, 'date');
+    }
+
+    protected function isArrayField($column): bool
+    {
+        return in_array($column, [
+            'kha_nang_hoc_sinh',
+            'suc_khoe_can_luu_y',
+        ]);
+    }
 
     protected function normalizeGender($value)
     {
-        $v = strtolower(trim($value ?? ''));
+        $v = strtolower(trim($value));
 
         return match ($v) {
             'nam' => 'nam',
@@ -168,7 +182,7 @@ class ApplicationsImport implements
 
     protected function normalizeStatus($value)
     {
-        $v = strtolower(trim($value ?? ''));
+        $v = strtolower(trim($value));
 
         return match ($v) {
             'pending' => 'pending',
@@ -180,15 +194,12 @@ class ApplicationsImport implements
 
     protected function parseDate($value)
     {
-        if (!$value) return null;
-
         try {
-            // Excel numeric date
             if (is_numeric($value)) {
                 return ExcelDate::excelToDateTimeObject($value)->format('Y-m-d');
             }
 
-            return \Carbon\Carbon::parse($value)->format('Y-m-d');
+            return Carbon::parse($value)->format('Y-m-d');
         } catch (\Exception $e) {
             return null;
         }
@@ -196,8 +207,6 @@ class ApplicationsImport implements
 
     protected function parseJson($value)
     {
-        if (!$value) return null;
-
         if (is_array($value)) return $value;
 
         if (is_string($value)) {

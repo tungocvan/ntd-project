@@ -10,7 +10,7 @@ class CreateLivewireModuleComponent extends Command
 {
     protected $signature = 'create:livewire
         {module : Tên Module (VD: Admin)}
-        {component : Component path (VD: post.index)}
+        {component : Component path (VD: post.index)} 
         {--delete : Xóa component và view}';
 
     protected $description = 'Tạo hoặc xóa Livewire component trong Module (hỗ trợ thư mục con).';

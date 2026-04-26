@@ -76,7 +76,7 @@
     <div class="bg-white border rounded-2xl p-6 space-y-6 my-1">
 
         <h3 class="font-semibold text-gray-700 uppercase text-sm">
-            Thông tin cá nhân
+            Phần I
         </h3>
 
         <div class="grid md:grid-cols-3 gap-5">
@@ -118,12 +118,12 @@
     <div class="bg-white border rounded-2xl p-6 space-y-6">
 
         <h3 class="font-semibold text-gray-700 uppercase text-sm">
-            Thông tin địa phương
+            Phần II
         </h3>
 
         <div class="space-y-5">
 
-            {{-- NƠI SINH --}}
+            {{-- NƠI KHAI SINH --}}
             <div>
                 <label class="text-sm font-medium">
                     Nơi sinh (Tỉnh/TP)
@@ -151,19 +151,25 @@
                         @endforeach
                     @endif
                 </x-select-search>
+            </div> 
+             <div>
+            <label class="text-sm font-medium">
+                    Nơi sinh
+                </label>
+                <input type="text" wire:model.live="form.NoiSinh"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
             </div>
-
             <div>
                 <label class="text-sm font-medium">
-                    Nơi sinh chi tiết:  {{ $form['NoiSinhPx'].", " }}{{ $form['NoiSinhTt']   }}
+                    Nơi sinh chi tiết: {{ $form['NoiSinh'].", "  }}{{ $form['NoiSinhPx'].", "  }}{{ $form['NoiSinhTt']  }}
                 </label>                
             </div>
 
             {{-- CHECKBOX COPY --}}
-            <label class="flex items-center gap-2 text-sm cursor-pointer">
+            {{-- <label class="flex items-center gap-2 text-sm cursor-pointer">
                 <input type="checkbox" wire:model.live="copyNoiSinhToQueQuan" class="rounded border-gray-300">
                 Quê quán giống nơi sinh
-            </label>
+            </label> --}}
 
             {{-- QUÊ QUÁN --}}
             <div>
@@ -195,20 +201,14 @@
                 </x-select-search>
             </div>            
 
-            {{-- NƠI KHAI SINH --}}
-            <div>
-                <label class="text-sm font-medium">
-                    Nơi đăng ký khai sinh
-                </label>
-                <input type="text" wire:model.live="form.NoiDangKyKhaiSinh"
-                    class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-            </div>
+            
+           
 
-            <div>
+            {{-- <div>
                 <label class="text-sm font-medium">
-                    Quê quán chi tiết: {{ $form['NoiDangKyKhaiSinh'].", "  }}{{ $form['QueQuanPx'].", "  }}{{ $form['QueQuanTt']  }}
+                    Quê quán chi tiết: {{ $form['QueQuanPx'].", "  }}{{ $form['QueQuanTt']  }}
                 </label>                
-            </div>
+            </div> --}}
             
         </div>
     </div>

@@ -26,6 +26,7 @@ class AdmissionApplication extends Model
         'noi_sinh_px',
         'noi_sinh_tt',
         'noi_dang_ky_khai_sinh',
+        'noi_sinh_chi_tiet',
         'que_quan',
         'que_quan_px',
         'que_quan_tt',

@@ -20,6 +20,7 @@ Route::middleware(['web','auth:admin'])
         Route::get('/export-pdf/{id}', [AdmissionController::class, 'downloadPdf'])->name('export-pdf');
         Route::get('/export', [AdmissionController::class, 'export'])->name('export');
         Route::post('/import', [AdmissionController::class, 'import'])->name('import');
+        Route::get('/dvhc', [AdmissionController::class, 'dvhc'])->name('dvhc');
 
     });
 

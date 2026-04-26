@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->string('noi_sinh_px')->nullable();
             $table->string('noi_sinh_tt')->nullable();
             $table->string('noi_dang_ky_khai_sinh')->nullable();
+            $table->string('noi_sinh_chi_tiet')->nullable();
             $table->string('que_quan')->nullable();
             $table->string('que_quan_px')->nullable();
             $table->string('que_quan_tt')->nullable();

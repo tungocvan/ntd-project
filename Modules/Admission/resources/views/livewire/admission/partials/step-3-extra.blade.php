@@ -18,15 +18,13 @@
     </div>
 
     {{-- Nếu chọn người khác --}}
-    @if(($form['OChungVoi'] ?? null) === 'other')
+    @if (($form['OChungVoi'] ?? null) === 'other')
         <div>
             <label class="block font-semibold mb-2">
                 Nhập quan hệ
             </label>
 
-            <input type="text"
-                wire:model="form.QuanHeNguoiNuoiDuong"
-                placeholder="Ví dụ: dì, cô, cậu..."
+            <input type="text" wire:model="form.QuanHeNguoiNuoiDuong" placeholder="Ví dụ: dì, cô, cậu..."
                 class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition">
         </div>
     @endif
@@ -36,8 +34,7 @@
     <div class="grid grid-cols-2 gap-4">
         <div>
             <label class="block font-semibold mb-2">Con thứ</label>
-            <input type="number" wire:model="form.ConThu"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3">
+            <input type="number" wire:model="form.ConThu" class="w-full rounded-xl border border-gray-300 px-4 py-3">
         </div>
 
         <div>
@@ -67,8 +64,7 @@
     <div>
         <label class="block font-semibold mb-2">Trường mầm non</label>
 
-        <input type="text" wire:model="form.TruongMamNon"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3">
+        <input type="text" wire:model="form.TruongMamNon" class="w-full rounded-xl border border-gray-300 px-4 py-3">
     </div>
 
 
@@ -89,11 +85,10 @@
                 ];
             @endphp
 
-            @foreach($skills as $skill)
+            @foreach ($skills as $skill)
                 <label class="flex items-center gap-2">
-                    <input type="checkbox" 
-                        value="{{ $skill }}"
-                        wire:model.live="form.KhaNangHocSinh">
+                    <input type="checkbox" value="{{ $skill }}" wire:model.live="form.kha_nang_hoc_sinh">
+
                     {{ $skill }}
                 </label>
             @endforeach
@@ -107,28 +102,20 @@
         <label class="block font-semibold mb-2">Lưu ý sức khỏe</label>
 
         @php
-            $healths = [
-                'Cận thị nhẹ',
-                'Hen suyễn',
-                'Viêm khớp bẩm sinh',
-            ];
+            $healths = ['Cận thị nhẹ', 'Hen suyễn', 'Viêm khớp bẩm sinh'];
         @endphp
 
         <div class="grid grid-cols-2 gap-2 mb-3">
-            @foreach($healths as $h)
+            @foreach ($healths as $h)
                 <label class="flex items-center gap-2">
-                    <input type="checkbox"
-                        value="{{ $h }}"
-                        wire:model="form.SucKhoeCanLuuY">
+                    <input type="checkbox" value="{{ $h }}" wire:model="form.SucKhoeCanLuuY">
                     {{ $h }}
                 </label>
             @endforeach
         </div>
 
         {{-- Nhập khác --}}
-        <input type="text"
-            wire:model="form.SucKhoeKhac"
-            placeholder="Khác..."
+        <input type="text" wire:model="form.SucKhoeKhac" placeholder="Khác..."
             class="w-full rounded-xl border border-gray-300 px-4 py-3">
     </div>
 
