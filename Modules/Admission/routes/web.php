@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Admission\Http\Controllers\AdmissionController;
-use Modules\Auth\Http\Controllers\AuthController;
+
 
 Route::middleware(['web','auth:admin'])->group(function () {
-       Route::get('/', [AdmissionController::class, 'adminIndex'])->name('admin.dashboard');
+       //Route::get('/', [AdmissionController::class, 'adminIndex'])->name('admin.dashboard');
        //Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/admin/', [AdmissionController::class, 'dashboard'])->name('dashboard');
 });
 
 Route::middleware(['web','auth:admin'])
