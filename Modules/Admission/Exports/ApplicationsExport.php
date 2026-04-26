@@ -16,8 +16,9 @@ class ApplicationsExport implements FromCollection, WithHeadings
 
     // Các cột muốn bỏ qua
     protected array $exceptFields = [
+        'noi_sinh_chi_tiet',
         'updated_at',
-        'deleted_at',
+        'deleted_at',        
         'pdf_path',
         'word_path',
         'created_at'

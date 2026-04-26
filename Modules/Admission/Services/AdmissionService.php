@@ -42,18 +42,7 @@ class AdmissionService
         $application->update($data);
         return $application;
     }
-    private function safe($value)
-    {
-        if (is_array($value)) {
-            return implode(', ', $value);
-        }
-
-        if (is_bool($value)) {
-            return $value ? 'Có' : 'Không';
-        }
-
-        return (string) ($value ?? '');
-    }
+  
     /**
      * HÀM CHUẨN HÓA DỮ LIỆU TRUNG TÂM (Tránh lỗi SQL 1366 và lỗi định dạng)
      */
@@ -72,9 +61,9 @@ class AdmissionService
             'noi_sinh_px'        => $formData['NoiSinhPx'] ?? null,
             'noi_sinh_tt'        => $formData['NoiSinhTt'] ?? null,
             'noi_sinh'           => $formData['NoiSinh'] ?? null,
-            'noi_dang_ky_khai_sinh' => $formData['NoiSinhPx'] . ", " . $formData['NoiSinhTt'] ?? '',
-            'noi_sinh_chi_tiet'     => $formData['NoiSinh'] . ", " . $formData['NoiSinhPx'] . ", " . $formData['NoiSinhTt'] ?? '',
-
+            'noi_sinh_chi_tiet'  => $formData['NoiSinh'] ?? '',
+            'noi_dang_ky_khai_sinh_px' => $formData['NoiDangKyKhaiSinhPx'] ?? null,
+            'noi_dang_ky_khai_sinh_tt' => $formData['NoiDangKyKhaiSinhTt'] ?? null, 
             'que_quan_px'        => $formData['QueQuanPx'] ?? null,
             'que_quan_tt'        => $formData['QueQuanTt'] ?? null,
             'que_quan'           => $formData['QueQuanPx'] . ", " . $formData['QueQuanTt'] ?? '',
@@ -159,8 +148,9 @@ class AdmissionService
             'NoiSinh'           => $app->noi_sinh,
             'NoiSinhPx'         => $app->noi_sinh_px,
             'NoiSinhTt'         => $app->noi_sinh_tt,
-            'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,
             'NoiSinhChiTiet'   => $app->noi_sinh_chi_tiet,
+            'NoiDangKyKhaiSinhPx' => $app->noi_dang_ky_khai_sinh_px,
+            'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,          
             'QueQuan'           => $app->que_quan,
             'QueQuanPx'         => $app->que_quan_px,
             'QueQuanTt'         => $app->que_quan_tt,

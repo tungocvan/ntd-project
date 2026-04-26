@@ -87,14 +87,14 @@
 
             @foreach ($skills as $skill)
                 <label class="flex items-center gap-2">
-                    <input type="checkbox" value="{{ $skill }}" wire:model.live="form.kha_nang_hoc_sinh">
+                    <input type="checkbox" value="{{ $skill }}" wire:model="form.KhaNangHocSinh">
 
                     {{ $skill }}
                 </label>
             @endforeach
 
         </div>
-    </div>
+    </div> 
 
 
     {{-- Sức khỏe --}}

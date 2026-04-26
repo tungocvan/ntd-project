@@ -18,6 +18,7 @@ class RegistrationForm extends Component
     public $ht_wards = [];
     public $noi_sinh_wards = [];
     public $que_quan_wards = [];
+    public $noi_dang_ky_khai_sinh_wards = [];
     public $ethnicities = [];
     public $religions = [];
     public $copyNoiSinhToQueQuan = false;
@@ -40,12 +41,12 @@ class RegistrationForm extends Component
     //     'NoiSinh' => '',
     //     'NoiSinhPx'  => '',
     //     'NoiSinhTt'  => '',
-    //     'NoiDangKyKhaiSinh' => '',
     //     'NoiSinhChiTiet'   => '',
+    //     'NoiDangKyKhaiSinhPx' => '',
+    //     'NoiDangKyKhaiSinhTt' => '', 
     //     'QueQuan' => '',
     //     'QueQuanPx' => '',
     //     'QueQuanTt' => '',
-
     //     // STEP 2
     //     'TTSN' => '',
     //     'TTD' => '',
@@ -116,8 +117,9 @@ class RegistrationForm extends Component
         'NoiSinh' => '',
         'NoiSinhPx'  => '',
         'NoiSinhTt'  => '',
-        'NoiDangKyKhaiSinh' => '',
         'NoiSinhChiTiet'   => '',
+        'NoiDangKyKhaiSinhPx' => '',
+        'NoiDangKyKhaiSinhTt' => '',      
         'QueQuan' => '',
         'QueQuanPx' => '',
         'QueQuanTt' => '',
@@ -224,19 +226,18 @@ class RegistrationForm extends Component
                 'NoiSinh' => $app->noi_sinh,
                 'NoiSinhPx' => $app->noi_sinh_px,
                 'NoiSinhTt' => $app->noi_sinh_tt,
-                'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,                
                 'NoiSinhChiTiet' => $app->noi_sinh_chi_tiet,
+                'NoiDangKyKhaiSinhPx' => $app->noi_dang_ky_khai_sinh_px,
+                'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,           
                 'QueQuan' => $app->que_quan,
                 'QueQuanPx' => $app->que_quan_px,
                 'QueQuanTt' => $app->que_quan_tt,
-
                 // STEP 2
                 'TTSN' => $app->ttsn,
                 'TTD' => $app->ttd,
                 'TTKP' => $app->ttkp,
                 'TTPX' => $app->ttpx,
                 'TTTTP' => $app->ttttp,
-
                 'HTSN' => $app->htsn,
                 'HTD' => $app->htd,
                 'HTKP' => $app->htkp,
@@ -253,7 +254,6 @@ class RegistrationForm extends Component
 
                 // ⚠️ STRING → ARRAY
                 'kha_nang_hoc_sinh' => $app->kha_nang_hoc_sinh ?? [],
-
                 'SucKhoeCanLuuY' => $app->suc_khoe_can_luu_y ?? [],
 
                 // STEP 4
@@ -297,6 +297,11 @@ class RegistrationForm extends Component
 
         if ($field === 'form.NoiSinhTt') {
             $this->noi_sinh_wards = AdmissionLocation::where('province_name', $this->form['NoiSinhTt'])->get()->toArray();
+        }
+
+
+        if ($field === 'form.NoiDangKyKhaiSinhTt') {
+            $this->noi_dang_ky_khai_sinh_wards = AdmissionLocation::where('province_name', $this->form['NoiDangKyKhaiSinhTt'])->get()->toArray();
         }
 
         if ($field === 'form.QueQuanTt') {

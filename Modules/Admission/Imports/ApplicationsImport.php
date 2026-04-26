@@ -24,6 +24,7 @@ class ApplicationsImport implements
 {
     protected array $exceptFields = [
         'id',
+        'noi_sinh_chi_tiet',
         'created_at',
         'updated_at',
         'deleted_at',
