@@ -109,6 +109,7 @@ class AdmissionApplication extends Model
 
             // Khi chuyển sang approved
             if ($model->wasChanged('status') && $model->status === 'approved') {
+                 \Log::info('updated DEBUG START');
                 \Modules\Admission\Jobs\GenerateAdmissionPdfJob::dispatch($model->id);
             }
         });

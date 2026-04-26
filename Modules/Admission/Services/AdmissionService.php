@@ -42,13 +42,24 @@ class AdmissionService
         $application->update($data);
         return $application;
     }
+    private function safe($value)
+    {
+        if (is_array($value)) {
+            return implode(', ', $value);
+        }
 
+        if (is_bool($value)) {
+            return $value ? 'Có' : 'Không';
+        }
+
+        return (string) ($value ?? '');
+    }
     /**
      * HÀM CHUẨN HÓA DỮ LIỆU TRUNG TÂM (Tránh lỗi SQL 1366 và lỗi định dạng)
      */
     private function prepareData(array $formData)
     {
-        return [
+        $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
             'gioi_tinh'          => $formData['GioiTinh'] ?? null,
@@ -60,7 +71,7 @@ class AdmissionService
             'sdt_enetviet'       => $formData['SDTEnetViet'] ?? null,
             'noi_sinh_px'        => $formData['NoiSinhPx'] ?? null,
             'noi_sinh_tt'        => $formData['NoiSinhTt'] ?? null,
-            'noi_sinh'           => $formData['NoiSinh'] ?? null, 
+            'noi_sinh'           => $formData['NoiSinh'] ?? null,
             'noi_dang_ky_khai_sinh' => $formData['NoiSinhPx'] . ", " . $formData['NoiSinhTt'] ?? '',
             'noi_sinh_chi_tiet'     => $formData['NoiSinh'] . ", " . $formData['NoiSinhPx'] . ", " . $formData['NoiSinhTt'] ?? '',
 
@@ -88,9 +99,8 @@ class AdmissionService
             'ts_anh_chi_em'      => (isset($formData['TSAnhChiEm']) && $formData['TSAnhChiEm'] !== '') ? (int)$formData['TSAnhChiEm'] : null,
             'hoan_thanh_lop_la'  => $formData['HoanThanhLopLa'] ?? null,
             'truong_mam_non'     => $formData['TruongMamNon'] ?? null,
-            'kha_nang_hoc_sinh'  => $formData['KhaNangHocSinh'] ?? null,
+            'kha_nang_hoc_sinh' =>  $formData['KhaNangHocSinh'] ?? null,
             'suc_khoe_can_luu_y' => $formData['SucKhoeCanLuuY'] ?? null,
-
             // 4. Cha - Mẹ - Giám hộ
             'ho_ten_cha'         => $formData['HoTenCha'] ?? null,
             'nam_sinh_cha'       => (isset($formData['NamSinhCha']) && $formData['NamSinhCha'] !== '') ? (int)$formData['NamSinhCha'] : null,
@@ -127,15 +137,16 @@ class AdmissionService
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
             'nguoi_lam_don'             => $formData['NguoiLamDon'] ?? null,
         ];
+        return $data;
     }
- 
+
     /**
      * DỮ LIỆU ĐỔ VÀO WORD (Sử dụng key của file Word mẫu)
      */
     public function getDataForTemplate($id)
     {
         $app = AdmissionApplication::findOrFail($id);
-        return [
+        $data = [
             'MaHoSo'            => $app->mhs,
             'HoVaTenHocSinh'    => Str::upper($app->ho_va_ten_hoc_sinh),
             'GioiTinh'          => $app->gioi_tinh,
@@ -146,9 +157,9 @@ class AdmissionService
             'TonGiao'           => $app->ton_giao,
             'SDTEnetViet'       => $app->sdt_enetviet,
             'NoiSinh'           => $app->noi_sinh,
-            'NoiSinhPx'         => $app->noi_sinh_px, 
+            'NoiSinhPx'         => $app->noi_sinh_px,
             'NoiSinhTt'         => $app->noi_sinh_tt,
-            'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh, 
+            'NoiDangKyKhaiSinh' => $app->noi_dang_ky_khai_sinh,
             'NoiSinhChiTiet'   => $app->noi_sinh_chi_tiet,
             'QueQuan'           => $app->que_quan,
             'QueQuanPx'         => $app->que_quan_px,
@@ -168,8 +179,12 @@ class AdmissionService
             'TSAnhChiEm'        => $app->ts_anh_chi_em ?? '……',
             'HoanThanhLopLa'    => $app->hoan_thanh_lop_la ?? '…………………………',
             'TruongMamNon'      => $app->truong_mam_non ?? '…………………………',
-            'KhaNangHocSinh'    => $app->kha_nang_hoc_sinh ?? '',
-            'SucKhoeCanLuuY'    => $app->suc_khoe_can_luu_y ?? '……………………………………………',
+            'KhaNangHocSinh'    =>   !empty($app->kha_nang_hoc_sinh)
+                ? implode(', ', $app->kha_nang_hoc_sinh)
+                : '',
+            'SucKhoeCanLuuY'    =>  !empty($app->suc_khoe_can_luu_y)
+                ? implode(', ', $app->suc_khoe_can_luu_y)
+                : '……………………………………………',
             'HoTenCha'          => $app->ho_ten_cha ?? '',
             'NamSinhCha'        => $app->nam_sinh_cha ?? '',
             'TdvhCha'           => $app->tdvh_cha ?? '',
@@ -195,6 +210,8 @@ class AdmissionService
             'Nam'               => Carbon::parse($app->created_at)->format('Y'),
             'NguoiLamDon'       => $app->nguoi_lam_don ?? '',
         ];
+        // dd($data);
+        return $data;
     }
 
     /**
