@@ -36,10 +36,10 @@
                 <label class="text-sm font-medium text-gray-600">
                     Giới tính
                 </label>
-                <select wire:model.defer="form.GioiTinh"
+                <select wire:model.live="form.GioiTinh"
                     class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
                     <option value="">-- Chọn --</option>
-                    <option value="Nam">Nam</option>
+                    <option value="Nam">Nam</option> 
                     <option value="Nữ">Nữ</option>
                 </select>
             </div>
