@@ -81,12 +81,12 @@
                     'Biết đàn',
                     'Biết hát',
                     'Biết bơi',
-                    'Đã biết đọc, biết viết',
+                    'Đã biết đọc, biết viết'
                 ];
             @endphp
 
             @foreach ($skills as $skill)
-                <label class="flex items-center gap-2">
+                <label class="flex items-center gap-2" wire:key="skill-{{ $skill }}">   
                     <input type="checkbox" value="{{ $skill }}" wire:model="form.KhaNangHocSinh">
 
                     {{ $skill }}
@@ -107,7 +107,7 @@
 
         <div class="grid grid-cols-2 gap-2 mb-3">
             @foreach ($healths as $h)
-                <label class="flex items-center gap-2">
+                <label class="flex items-center gap-2" wire:key="health-{{ $h }}">
                     <input type="checkbox" value="{{ $h }}" wire:model="form.SucKhoeCanLuuY">
                     {{ $h }}
                 </label>

@@ -48,6 +48,8 @@ class AdmissionService
      */
     private function prepareData(array $formData)
     {
+        //$formData['KhaNangHocSinh'] = (array) ($formData['KhaNangHocSinh'] ?? []);
+        //dd($formData['KhaNangHocSinh']);
         $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
@@ -88,8 +90,8 @@ class AdmissionService
             'ts_anh_chi_em'      => (isset($formData['TSAnhChiEm']) && $formData['TSAnhChiEm'] !== '') ? (int)$formData['TSAnhChiEm'] : null,
             'hoan_thanh_lop_la'  => $formData['HoanThanhLopLa'] ?? null,
             'truong_mam_non'     => $formData['TruongMamNon'] ?? null,
-            'kha_nang_hoc_sinh' =>  $formData['KhaNangHocSinh'] ?? null,
-            'suc_khoe_can_luu_y' => $formData['SucKhoeCanLuuY'] ?? null,
+            'kha_nang_hoc_sinh' =>  $formData['KhaNangHocSinh'] ?? [],
+            'suc_khoe_can_luu_y' => $formData['SucKhoeCanLuuY'] ?? [],
             // 4. Cha - Mẹ - Giám hộ
             'ho_ten_cha'         => $formData['HoTenCha'] ?? null,
             'nam_sinh_cha'       => (isset($formData['NamSinhCha']) && $formData['NamSinhCha'] !== '') ? (int)$formData['NamSinhCha'] : null,

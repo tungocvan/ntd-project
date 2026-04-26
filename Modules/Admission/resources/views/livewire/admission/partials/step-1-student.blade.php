@@ -176,7 +176,7 @@
                 <label class="text-sm font-medium text-gray-600">
                     Phường/Xã
                 </label>
-                <x-select-search id="noi_dkks_px" options-wire="noi_dang_ky_khai_sinh_wards"
+                <x-select-search id="noi_dang_ky_khai_sinh_px" options-wire="noi_dang_ky_khai_sinh_wards"
                     wire:model.live="form.NoiDangKyKhaiSinhPx" placeholder="Phường / Xã">
                     <option value="">-- Chọn --</option>
                     @foreach ($noi_dang_ky_khai_sinh_wards ?? [] as $w)

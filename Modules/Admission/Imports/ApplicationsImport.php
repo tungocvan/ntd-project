@@ -52,9 +52,9 @@ class ApplicationsImport implements
                         }
 
                         // ❗ bỏ qua null → không overwrite
-                        if ($value === null || $value === '') {
-                            continue;
-                        }
+                        // if ($value === null || $value === '') {
+                        //     continue;
+                        // }
 
                         $data[$column] = $this->transformValue($column, $value);
                     }
@@ -66,6 +66,7 @@ class ApplicationsImport implements
                     $key = $data['ma_dinh_danh']
                         ?? $data['mhs']
                         ?? null;
+                    
 
                     if (!$key) {
                         Log::warning('SKIP - NO KEY', [
@@ -74,6 +75,8 @@ class ApplicationsImport implements
                         ]);
                         continue;
                     }
+
+               
 
                     // =========================
                     // 🔥 FIND EXISTING
@@ -129,9 +132,9 @@ class ApplicationsImport implements
 
     protected function transformValue($column, $value)
     {
-        if ($column === 'gioi_tinh') {
-            return $this->normalizeGender($value);
-        }
+        // if ($column === 'gioi_tinh') {
+        //     return $this->normalizeGender($value);
+        // }
 
         if ($column === 'status') {
             return $this->normalizeStatus($value);

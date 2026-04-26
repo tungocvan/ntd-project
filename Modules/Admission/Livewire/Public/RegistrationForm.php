@@ -26,6 +26,7 @@ class RegistrationForm extends Component
     public $applicationId = null;
     public $isEdit = false;
 
+
     // ⚠️ QUAN TRỌNG: GIỮ NGUYÊN KEY PascalCase
     // public $form = [
 
@@ -112,14 +113,14 @@ class RegistrationForm extends Component
         'MaDinhDanh' => '079120000001',
         'QuocTich' => 'Việt Nam',
         'TonGiao' => 'Không',
-        'SDTEnetViet' => '0908123456',        
+        'SDTEnetViet' => '0908123456',
 
         'NoiSinh' => '',
         'NoiSinhPx'  => '',
         'NoiSinhTt'  => '',
         'NoiSinhChiTiet'   => '',
         'NoiDangKyKhaiSinhPx' => '',
-        'NoiDangKyKhaiSinhTt' => '',      
+        'NoiDangKyKhaiSinhTt' => '',
         'QueQuan' => '',
         'QueQuanPx' => '',
         'QueQuanTt' => '',
@@ -207,11 +208,14 @@ class RegistrationForm extends Component
         $this->form['NgayLamDon'] = date('Y-m-d');
         // ================= EDIT MODE =================
         if ($id) {
+
             $this->isEdit = true;
             $this->applicationId = $id;
 
             $app = AdmissionApplication::findOrFail($id);
-
+            //dump($app->kha_nang_hoc_sinh, gettype($app->kha_nang_hoc_sinh));
+            //dd($this->form['KhaNangHocSinh']);
+            // dd($app->gioi_tinh);
             // ⚠️ MAP DB → FORM (phải đúng key Service)
             $this->form = [
                 // STEP 1
@@ -228,7 +232,7 @@ class RegistrationForm extends Component
                 'NoiSinhTt' => $app->noi_sinh_tt,
                 'NoiSinhChiTiet' => $app->noi_sinh_chi_tiet,
                 'NoiDangKyKhaiSinhPx' => $app->noi_dang_ky_khai_sinh_px,
-                'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,           
+                'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,
                 'QueQuan' => $app->que_quan,
                 'QueQuanPx' => $app->que_quan_px,
                 'QueQuanTt' => $app->que_quan_tt,
@@ -253,8 +257,12 @@ class RegistrationForm extends Component
                 'TruongMamNon' => $app->truong_mam_non,
 
                 // ⚠️ STRING → ARRAY
-                'kha_nang_hoc_sinh' => $app->kha_nang_hoc_sinh ?? [],
-                'SucKhoeCanLuuY' => $app->suc_khoe_can_luu_y ?? [],
+                'KhaNangHocSinh' => is_array($app->kha_nang_hoc_sinh)
+                    ? $app->kha_nang_hoc_sinh
+                    : [],
+                'SucKhoeCanLuuY' => is_array($app->suc_khoe_can_luu_y)
+                    ? $app->suc_khoe_can_luu_y
+                    : [],
 
                 // STEP 4
                 'HoTenCha' => $app->ho_ten_cha,
@@ -282,6 +290,7 @@ class RegistrationForm extends Component
             $this->updated('form.HTTTP');
             $this->updated('form.NoiSinhTt');
             $this->updated('form.QueQuanTt');
+            $this->updated('form.NoiDangKyKhaiSinhTt');
         }
     }
 
@@ -312,9 +321,9 @@ class RegistrationForm extends Component
     public function updatedCopyNoiSinhToQueQuan($value)
     {
         if ($value) {
-        
+
             $this->form['QueQuanPx'] = $this->form['NoiSinhPx'];
-            $this->form['QueQuanTt'] = $this->form['NoiSinhTt'];    
+            $this->form['QueQuanTt'] = $this->form['NoiSinhTt'];
         }
     }
     // ================= SAME ADDRESS =================
@@ -429,13 +438,13 @@ class RegistrationForm extends Component
             $data = $this->form;
 
             // FORMAT giống bạn đang làm
-            $data['KhaNangHocSinh'] = !empty($data['KhaNangHocSinh'])
-                ? implode(', ', $data['KhaNangHocSinh'])
-                : null;
+            $data['KhaNangHocSinh'] = is_array($data['KhaNangHocSinh'])
+                ? $data['KhaNangHocSinh']
+                : [];
 
-            $data['SucKhoeCanLuuY'] = !empty($data['SucKhoeCanLuuY'])
-                ? implode(', ', $data['SucKhoeCanLuuY'])
-                : null;
+            $data['SucKhoeCanLuuY'] = is_array($data['SucKhoeCanLuuY'])
+                ? $data['SucKhoeCanLuuY']
+                : [];
 
             if (($data['OChungVoi'] ?? null) === 'other') {
                 $data['OChungVoi'] = $data['QuanHeNguoiNuoiDuong'] ?? null;
