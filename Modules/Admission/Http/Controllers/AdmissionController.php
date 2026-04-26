@@ -181,4 +181,15 @@ class AdmissionController extends Controller
 
         return response()->download(storage_path('app/' . $path));
     }
+
+    public function receipt($id, AdmissionService $service)
+    {
+        $app = AdmissionApplication::findOrFail($id);
+
+        if ($app->status !== 'approved') {
+            abort(403, 'Hồ sơ chưa được duyệt');
+        }
+
+        return $service->generateBienNhan($app);
+    }
 }

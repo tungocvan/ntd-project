@@ -1,5 +1,5 @@
 <div class="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
-    
+
     {{-- SUCCESS --}}
     @if (session('success'))
         <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm">
@@ -61,84 +61,84 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
     </div>
 
     @can('create_admission')
-    <div
-        class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div
+            class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-        {{-- LEFT: EXPORT --}}
-        <div class="flex items-center gap-3">
-            <button wire:click="export"
-                class="inline-flex items-center gap-2 px-4 h-11 rounded-xl bg-blue-600 text-white text-sm font-semibold
+            {{-- LEFT: EXPORT --}}
+            <div class="flex items-center gap-3">
+                <button wire:click="export"
+                    class="inline-flex items-center gap-2 px-4 h-11 rounded-xl bg-blue-600 text-white text-sm font-semibold
                        hover:bg-blue-700 transition-colors shadow-sm">
 
-                {{-- icon --}}
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
-                </svg>
+                    {{-- icon --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                    </svg>
 
-                Export Excel
-            </button>
-
-            <span class="text-xs text-gray-500">
-                Xuất dữ liệu theo bộ lọc hiện tại
-            </span>
-        </div>
-
-        {{-- RIGHT: IMPORT --}}
-        <form action="{{ route('admin.admission.import') }}" method="POST" enctype="multipart/form-data"
-            x-data="{ fileName: '' }" class="flex items-center gap-3">
-
-            @csrf
-
-            <label
-                class="flex items-center gap-2 px-3 h-11 rounded-xl border border-gray-300 bg-white text-sm text-gray-600 cursor-pointer hover:bg-gray-50 transition-colors">
-
-                <!-- ICON -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0 0l-3-3m3 3l3-3" />
-                </svg>
-
-                <!-- TEXT -->
-                <span x-text="fileName || 'Chọn file Excel'"></span>
-
-                <!-- INPUT -->
-                <input type="file" name="file" class="hidden" accept=".xlsx,.xls"
-                    @change="fileName = $event.target.files[0]?.name">
-            </label>
-
-            <button type="submit" :disabled="!fileName"
-                class="inline-flex items-center px-4 h-11 rounded-xl bg-gray-900 text-white text-sm font-semibold
-           hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                Import
-            </button>
-        </form>
-    </div>
-
-    
-    {{-- BULK BAR --}}
-    @if (count($selected) > 0)
-        <div class="flex justify-between items-center bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
-            <span class="text-sm font-medium text-indigo-800">
-                Đã chọn {{ count($selected) }} hồ sơ
-            </span>
-
-            <div class="flex items-center gap-2">
-                <button wire:click="deleteSelected"
-                    class="px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm hover:bg-gray-50">
-                    Xóa
+                    Export Excel
                 </button>
 
-                <button wire:click="$set('selected', [])"
-                    class="px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm hover:bg-gray-50">
-                    Bỏ chọn
-                </button>
+                <span class="text-xs text-gray-500">
+                    Xuất dữ liệu theo bộ lọc hiện tại
+                </span>
             </div>
+
+            {{-- RIGHT: IMPORT --}}
+            <form action="{{ route('admin.admission.import') }}" method="POST" enctype="multipart/form-data"
+                x-data="{ fileName: '' }" class="flex items-center gap-3">
+
+                @csrf
+
+                <label
+                    class="flex items-center gap-2 px-3 h-11 rounded-xl border border-gray-300 bg-white text-sm text-gray-600 cursor-pointer hover:bg-gray-50 transition-colors">
+
+                    <!-- ICON -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0 0l-3-3m3 3l3-3" />
+                    </svg>
+
+                    <!-- TEXT -->
+                    <span x-text="fileName || 'Chọn file Excel'"></span>
+
+                    <!-- INPUT -->
+                    <input type="file" name="file" class="hidden" accept=".xlsx,.xls"
+                        @change="fileName = $event.target.files[0]?.name">
+                </label>
+
+                <button type="submit" :disabled="!fileName"
+                    class="inline-flex items-center px-4 h-11 rounded-xl bg-gray-900 text-white text-sm font-semibold
+           hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                    Import
+                </button>
+            </form>
         </div>
-    @endif
-    @endcan    
+
+
+        {{-- BULK BAR --}}
+        @if (count($selected) > 0)
+            <div class="flex justify-between items-center bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
+                <span class="text-sm font-medium text-indigo-800">
+                    Đã chọn {{ count($selected) }} hồ sơ
+                </span>
+
+                <div class="flex items-center gap-2">
+                    <button wire:click="deleteSelected"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm hover:bg-gray-50">
+                        Xóa
+                    </button>
+
+                    <button wire:click="$set('selected', [])"
+                        class="px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm hover:bg-gray-50">
+                        Bỏ chọn
+                    </button>
+                </div>
+            </div>
+        @endif
+    @endcan
     {{-- TABLE --}}
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
@@ -199,18 +199,25 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                             <button wire:click="approve({{ $item->id }})"
                                                 class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">
                                                 Duyệt
-                                            </button>                                        
+                                            </button>
 
-                                        <button wire:click="reject({{ $item->id }})"
-                                            class="text-rose-600 hover:text-rose-700 text-xs font-medium">
-                                            Từ chối
-                                        </button>
+                                            <button wire:click="reject({{ $item->id }})"
+                                                class="text-rose-600 hover:text-rose-700 text-xs font-medium">
+                                                Từ chối
+                                            </button>
                                         @endcan
                                     </div>
                                 @elseif($item->status === 'approved')
                                     <span class="px-2.5 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-full">
                                         Đã duyệt
                                     </span>
+                                    {{-- BIÊN NHẬN --}}
+                                    @if ($item->status === 'approved')
+                                        <a href="{{ route('admission.receipt', $item->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition">
+                                            Biên nhận
+                                        </a>
+                                    @endif
                                 @else
                                     <span class="px-2.5 py-1 text-xs bg-rose-100 text-rose-800 rounded-full">
                                         Từ chối
@@ -225,9 +232,9 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
               hover:bg-blue-50 rounded-lg transition">
                                     Chi tiết
                                 </a>
-                                
+
                                 {{-- DOWNLOAD PDF --}}
-                                
+
                                 @if ($item->pdf_path && Storage::disk('local')->exists($item->pdf_path))
                                     <a href="{{ route('admission.download', ['id' => $item->id, 'type' => 'pdf']) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition">
@@ -242,14 +249,14 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                         Word
                                     </a>
                                 @endif
-                                
+
 
                                 {{-- DELETE --}}
-                                 @can('create_admission')
-                                <button wire:click="delete({{ $item->id }})"
-                                    class="text-rose-500 hover:text-rose-700 text-sm">
-                                    Xóa
-                                </button>
+                                @can('create_admission')
+                                    <button wire:click="delete({{ $item->id }})"
+                                        class="text-rose-500 hover:text-rose-700 text-sm">
+                                        Xóa
+                                    </button>
                                 @endcan
                             </td>
                         </tr>

@@ -10,7 +10,8 @@ use Illuminate\Queue\SerializesModels;
 
 use Modules\Admission\Models\AdmissionApplication;
 use Modules\Admission\Services\AdmissionService;
-use Symfony\Component\Process\Process;
+use App\Services\DocumentConverterService;
+//use Symfony\Component\Process\Process;
 use Illuminate\Support\Str;
 
 class GenerateAdmissionPdfJob implements ShouldQueue
@@ -26,113 +27,109 @@ class GenerateAdmissionPdfJob implements ShouldQueue
 
 
 
-    public function handle(AdmissionService $service)
-    {
-        $app = AdmissionApplication::find($this->id);
-        if (!$app) return;
+    public function handle(
+    AdmissionService $service,
+    DocumentConverterService $converter
+) {
+    $app = AdmissionApplication::find($this->id);
 
-        // ❗ chỉ chạy khi approved
-        if ($app->status !== 'approved') return;
+    if (!$app) {
+        return;
+    }
 
-        try {
-            // 🔥 data
-            $data = $service->getDataForTemplate($this->id);
+    // ❗ chỉ xử lý khi đã duyệt
+    if ($app->status !== 'approved') {
+        return;
+    }
 
-            // 🔥 filename (safe)
-            $name = 'Don_' . Str::slug($data['HoVaTenHocSinh'], '_');
+    try {
+        // =========================
+        // 🔥 DATA
+        // =========================
+        $data = $service->getDataForTemplate($this->id);
 
-            // 🔥 PATH CHUẨN
-            $relativeDir = 'admission/';
-            $fullDir = storage_path('app/' . $relativeDir);
+        $name = 'Don_' . \Str::slug($data['HoVaTenHocSinh'] ?? 'unknown', '_');
 
-            // 🔥 ensure folder
-            if (!is_dir($fullDir)) {
-                mkdir($fullDir, 0775, true);
-            }
+        $relativeDir = 'admission/';
+        $fullDir = storage_path('app/' . $relativeDir);
 
-            chmod($fullDir, 0775);
+        // =========================
+        // 📁 ENSURE FOLDER
+        // =========================
+        if (!is_dir($fullDir)) {
+            mkdir($fullDir, 0775, true);
+        }
 
-            // 🔥 file paths
-            $wordRelative = $relativeDir . $name . '.docx';
-            $pdfRelative  = $relativeDir . $name . '.pdf';
+        chmod($fullDir, 0775);
 
-            $wordFull = $fullDir . $name . '.docx';
-            $pdfFull  = $fullDir . $name . '.pdf';
+        // =========================
+        // 📄 PATH
+        // =========================
+        $wordRelative = $relativeDir . $name . '.docx';
+        $pdfRelative  = $relativeDir . $name . '.pdf';
 
-            // 🔥 nếu đã có PDF → chỉ update DB và thoát
-            if (file_exists($pdfFull)) {
-                $app->updateQuietly([
-                    'pdf_path'  => $pdfRelative,
-                    'word_path' => $wordRelative,
-                ]);
-                return;
-            }
+        $wordFull = $fullDir . $name . '.docx';
+        $pdfFull  = $fullDir . $name . '.pdf';
 
-            // =========================
-            // 📝 TẠO WORD
-            // =========================
-            if (!file_exists($wordFull)) {
-
-                $template = storage_path('app/templates/application.docx');
-
-                if (!file_exists($template)) {
-                    throw new \Exception('Template không tồn tại');
-                }
-
-                $tp = new \PhpOffice\PhpWord\TemplateProcessor($template);
-
-                foreach ($data as $key => $value) {
-                    $tp->setValue($key, $value);
-                }
-
-                $tp->saveAs($wordFull);
-
-                // 🔥 permission
-                chmod($wordFull, 0664);
-            }
-
-            // =========================
-            // 📄 CONVERT PDF
-            // =========================
-            $process = new Process([
-                'libreoffice',
-                '--headless',
-                '--convert-to',
-                'pdf',
-                '--outdir',
-                $fullDir,
-                $wordFull
-            ]);
-
-            $process->setTimeout(120);
-            $process->setEnv(['HOME' => $fullDir]);
-
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                throw new \Exception($process->getErrorOutput());
-            }
-
-            // 🔥 check PDF
-            if (!file_exists($pdfFull)) {
-                throw new \Exception('Không tạo được PDF');
-            }
-
-            // 🔥 permission
-            chmod($pdfFull, 0664);
-
-            // =========================
-            // 💾 UPDATE DB (CHUẨN)
-            // =========================
+        // =========================
+        // 🚀 Nếu PDF đã tồn tại → skip
+        // =========================
+        if (file_exists($pdfFull)) {
             $app->updateQuietly([
                 'pdf_path'  => $pdfRelative,
                 'word_path' => $wordRelative,
             ]);
-        } catch (\Throwable $e) {
-            \Log::error('Generate PDF lỗi', [
-                'id' => $this->id,
-                'error' => $e->getMessage(),
-            ]);
+            return;
         }
+
+        // =========================
+        // 📝 GENERATE WORD
+        // =========================
+        if (!file_exists($wordFull)) {
+
+            $template = storage_path('app/templates/application.docx');
+
+            if (!file_exists($template)) {
+                throw new \Exception('Template không tồn tại');
+            }
+
+            $tp = new \PhpOffice\PhpWord\TemplateProcessor($template);
+
+            foreach ($data as $key => $value) {
+                $tp->setValue($key, $value ?? '');
+            }
+
+            $tp->saveAs($wordFull);
+
+            chmod($wordFull, 0664);
+        }
+
+        // =========================
+        // 📄 CONVERT PDF (SERVICE)
+        // =========================
+       $pdfFull = $converter->toPdf($wordFull, $fullDir);
+
+        // =========================
+        // 🔍 VERIFY PDF
+        // =========================
+        if (!file_exists($pdfFull)) {
+            throw new \Exception('Convert xong nhưng không thấy file PDF');
+        }
+
+        // =========================
+        // 💾 UPDATE DB
+        // =========================
+        $app->updateQuietly([
+            'pdf_path'  => $pdfRelative,
+            'word_path' => $wordRelative,
+        ]);
+
+    } catch (\Throwable $e) {
+
+        \Log::error('Generate Admission PDF lỗi', [
+            'id'    => $this->id,
+            'error' => $e->getMessage(),
+        ]);
     }
+}
 }

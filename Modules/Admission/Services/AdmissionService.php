@@ -237,4 +237,32 @@ class AdmissionService
     {
         return AdmissionApplication::findOrFail($id)->delete();
     }
+
+    public function generateBienNhan($app)
+    {
+        $templatePath = storage_path('app/templates/bien-nhan.docx');
+
+        if (!file_exists($templatePath)) {
+            abort(500, 'Không tìm thấy file template');
+        }
+
+        $fileName = 'bien-nhan-' . $app->id . '.docx';
+        $tempFile = storage_path('app/temp/' . $fileName);
+
+        // tạo thư mục temp nếu chưa có
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0777, true);
+        }
+
+        $template = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+        // replace dữ liệu
+        $template->setValue('HoVaTenHocSinh', $app->ho_va_ten_hoc_sinh); 
+        $template->setValue('NgaySinh', $app->ngay_sinh ? Carbon::parse($app->ngay_sinh)->format('d/m/Y') : '');
+        $template->setValue('MaHoSo', $app->mhs);
+
+        $template->saveAs($tempFile);
+
+        return response()->download($tempFile)->deleteFileAfterSend(true);
+    }
 }

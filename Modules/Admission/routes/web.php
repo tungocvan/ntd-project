@@ -35,6 +35,8 @@ Route::middleware(['web','auth:admin'])
     Route::get('/download-word/{id}', [AdmissionController::class, 'downloadDocx'])->name('download-word');
     Route::get('/{id}/download/{type}', [AdmissionController::class, 'download'])
     ->name('download');
+    Route::get('/{id}/receipt', [AdmissionController::class, 'receipt'])
+    ->name('receipt');
 
 });
 
