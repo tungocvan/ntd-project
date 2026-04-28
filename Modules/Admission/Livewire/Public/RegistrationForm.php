@@ -28,142 +28,64 @@ class RegistrationForm extends Component
 
 
     // ⚠️ QUAN TRỌNG: GIỮ NGUYÊN KEY PascalCase
-    // public $form = [
-
-    //     // STEP 1
-    //     'HoVaTenHocSinh' => '',
-    //     'GioiTinh' => '',
-    //     'NgaySinh' => '',
-    //     'DanToc' => 'Kinh',
-    //     'MaDinhDanh' => '',
-    //     'QuocTich' => 'Việt Nam',
-    //     'TonGiao' => 'Không',
-    //     'SDTEnetViet' => '',
-    //     'NoiSinh' => '',
-    //     'NoiSinhPx'  => '',
-    //     'NoiSinhTt'  => '',
-    //     'NoiSinhChiTiet'   => '',
-    //     'NoiDangKyKhaiSinhPx' => '',
-    //     'NoiDangKyKhaiSinhTt' => '', 
-    //     'QueQuan' => '',
-    //     'QueQuanPx' => '',
-    //     'QueQuanTt' => '',
-    //     // STEP 2
-    //     'TTSN' => '',
-    //     'TTD' => '',
-    //     'TTKP' => '',
-    //     'TTPX' => '',
-    //     'TTTTP' => '',
-
-    //     'HTSN' => '',
-    //     'HTD' => '',
-    //     'HTKP' => '',
-    //     'HTPX' => '',
-    //     'HTTTP' => '',
-
-    //     // STEP 3
-    //     'OChungVoi' => '',
-    //     'QuanHeNguoiNuoiDuong' => '',
-    //     'ConThu' => '',
-    //     'TSAnhChiEm' => '',
-    //     'HoanThanhLopLa' => '',
-    //     'TruongMamNon' => '',
-    //     'KhaNangHocSinh' => [],
-    //     'SucKhoeCanLuuY' => [],
-    //     'SucKhoeKhac' => '',
-
-    //     // STEP 4
-    //     'HoTenCha' => '',
-    //     'NamSinhCha' => '',
-    //     'NgheNghiepCha' => 'LĐTD',
-    //     'ChucVuCha' => '',
-    //     'DienThoaiCha' => '',
-    //     'CCCDCha' => '',
-
-    //     'HoTenMe' => '',
-    //     'NamSinhMe' => '',
-    //     'NgheNghiepMe' => 'LĐTD',
-    //     'ChucVuMe' => '',
-    //     'DienThoaiMe' => '',
-    //     'CCCDMe' => '',
-
-    //     'HoTenNguoiGiamHo' => '',
-    //     'QuanHeGiamHo' => '',
-    //     'DienThoaiGiamHo' => '',
-    //     'CCCDGiamHo' => '',
-
-    //     // STEP 5
-    //     'LoaiLopDangKy' => 'Lớp thường',
-    //     'CK_GocHocTap' => false,
-    //     'CK_SachVo' => false,
-    //     'CK_HopPH' => false,
-    //     'CK_ThamGiaHD' => false,
-    //     'CK_GanGui' => false,
-
-    //     'NgayLamDon' => '',
-    //     'NguoiLamDon' => '',
-    // ];
-
     public $form = [
+
         // STEP 1
-        'HoVaTenHocSinh' => 'Nguyễn Minh An',
-        'GioiTinh' => 'Nam',
-        'NgaySinh' => '2020-01-01',
+        'HoVaTenHocSinh' => '',
+        'GioiTinh' => '',
+        'NgaySinh' => '',
         'DanToc' => 'Kinh',
-        'MaDinhDanh' => '079120000001',
+        'MaDinhDanh' => '',
         'QuocTich' => 'Việt Nam',
         'TonGiao' => 'Không',
-        'SDTEnetViet' => '0908123456',
-
+        'SDTEnetViet' => '',
         'NoiSinh' => '',
         'NoiSinhPx'  => '',
         'NoiSinhTt'  => '',
         'NoiSinhChiTiet'   => '',
         'NoiDangKyKhaiSinhPx' => '',
-        'NoiDangKyKhaiSinhTt' => '',
+        'NoiDangKyKhaiSinhTt' => '', 
         'QueQuan' => '',
         'QueQuanPx' => '',
         'QueQuanTt' => '',
-
         // STEP 2
-        'TTSN' => '45',
-        'TTD' => 'Huỳnh Tấn Phát',
-        'TTKP' => 'KP 2',
+        'TTSN' => '',
+        'TTD' => '',
+        'TTKP' => '',
         'TTPX' => '',
         'TTTTP' => '',
 
-        'HTSN' => '45',
-        'HTD' => 'Huỳnh Tấn Phát',
-        'HTKP' => 'KP 2',
+        'HTSN' => '',
+        'HTD' => '',
+        'HTKP' => '',
         'HTPX' => '',
         'HTTTP' => '',
 
         // STEP 3
-        'OChungVoi' => 'Cha mẹ',
+        'OChungVoi' => '',
         'QuanHeNguoiNuoiDuong' => '',
-        'ConThu' => '1',
-        'TSAnhChiEm' => '2',
-        'HoanThanhLopLa' => 'Có',
-        'TruongMamNon' => 'Rạng Đông',
+        'ConThu' => '',
+        'TSAnhChiEm' => '',
+        'HoanThanhLopLa' => '',
+        'TruongMamNon' => '',
         'KhaNangHocSinh' => [],
         'SucKhoeCanLuuY' => [],
         'SucKhoeKhac' => '',
 
         // STEP 4
-        'HoTenCha' => 'Nguyễn Văn Hùng',
-        'NamSinhCha' => '1990',
+        'HoTenCha' => '',
+        'NamSinhCha' => '',
         'NgheNghiepCha' => 'LĐTD',
         'ChucVuCha' => '',
-        'DienThoaiCha' => '0909000001',
-        'CCCDCha' => '079088880001
-',
+        'DienThoaiCha' => '',
+        'CCCDCha' => '',
 
-        'HoTenMe' => 'Trần Thị Mai',
-        'NamSinhMe' => '1992',
+        'HoTenMe' => '',
+        'NamSinhMe' => '',
         'NgheNghiepMe' => 'LĐTD',
         'ChucVuMe' => '',
-        'DienThoaiMe' => '0909000002',
-        'CCCDMe' => '079088880002',
+        'DienThoaiMe' => '',
+        'CCCDMe' => '',
 
         'HoTenNguoiGiamHo' => '',
         'QuanHeGiamHo' => '',
@@ -172,15 +94,93 @@ class RegistrationForm extends Component
 
         // STEP 5
         'LoaiLopDangKy' => 'Lớp thường',
-        'CK_GocHocTap' => true,
-        'CK_SachVo' => true,
-        'CK_HopPH' => true,
-        'CK_ThamGiaHD' => true,
-        'CK_GanGui' => true,
+        'CK_GocHocTap' => false,
+        'CK_SachVo' => false,
+        'CK_HopPH' => false,
+        'CK_ThamGiaHD' => false,
+        'CK_GanGui' => false,
 
         'NgayLamDon' => '',
-        'NguoiLamDon' => 'Trần Thị Mai',
+        'NguoiLamDon' => '',
     ];
+
+//     public $form = [
+//         // STEP 1
+//         'HoVaTenHocSinh' => 'Nguyễn Minh An',
+//         'GioiTinh' => 'Nam',
+//         'NgaySinh' => '2020-01-01',
+//         'DanToc' => 'Kinh',
+//         'MaDinhDanh' => '079120000001',
+//         'QuocTich' => 'Việt Nam',
+//         'TonGiao' => 'Không',
+//         'SDTEnetViet' => '0908123456',
+
+//         'NoiSinh' => '',
+//         'NoiSinhPx'  => '',
+//         'NoiSinhTt'  => '',
+//         'NoiSinhChiTiet'   => '',
+//         'NoiDangKyKhaiSinhPx' => '',
+//         'NoiDangKyKhaiSinhTt' => '',
+//         'QueQuan' => '',
+//         'QueQuanPx' => '',
+//         'QueQuanTt' => '',
+
+//         // STEP 2
+//         'TTSN' => '45',
+//         'TTD' => 'Huỳnh Tấn Phát',
+//         'TTKP' => 'KP 2',
+//         'TTPX' => '',
+//         'TTTTP' => '',
+
+//         'HTSN' => '45',
+//         'HTD' => 'Huỳnh Tấn Phát',
+//         'HTKP' => 'KP 2',
+//         'HTPX' => '',
+//         'HTTTP' => '',
+
+//         // STEP 3
+//         'OChungVoi' => 'Cha mẹ',
+//         'QuanHeNguoiNuoiDuong' => '',
+//         'ConThu' => '1',
+//         'TSAnhChiEm' => '2',
+//         'HoanThanhLopLa' => 'Có',
+//         'TruongMamNon' => 'Rạng Đông',
+//         'KhaNangHocSinh' => [],
+//         'SucKhoeCanLuuY' => [],
+//         'SucKhoeKhac' => '',
+
+//         // STEP 4
+//         'HoTenCha' => 'Nguyễn Văn Hùng',
+//         'NamSinhCha' => '1990',
+//         'NgheNghiepCha' => 'LĐTD',
+//         'ChucVuCha' => '',
+//         'DienThoaiCha' => '0909000001',
+//         'CCCDCha' => '079088880001
+// ',
+
+//         'HoTenMe' => 'Trần Thị Mai',
+//         'NamSinhMe' => '1992',
+//         'NgheNghiepMe' => 'LĐTD',
+//         'ChucVuMe' => '',
+//         'DienThoaiMe' => '0909000002',
+//         'CCCDMe' => '079088880002',
+
+//         'HoTenNguoiGiamHo' => '',
+//         'QuanHeGiamHo' => '',
+//         'DienThoaiGiamHo' => '',
+//         'CCCDGiamHo' => '',
+
+//         // STEP 5
+//         'LoaiLopDangKy' => 'Lớp thường',
+//         'CK_GocHocTap' => true,
+//         'CK_SachVo' => true,
+//         'CK_HopPH' => true,
+//         'CK_ThamGiaHD' => true,
+//         'CK_GanGui' => true,
+
+//         'NgayLamDon' => '',
+//         'NguoiLamDon' => 'Trần Thị Mai',
+//     ];
 
     protected $rules = [
         'form.HoVaTenHocSinh' => 'required|min:5',
