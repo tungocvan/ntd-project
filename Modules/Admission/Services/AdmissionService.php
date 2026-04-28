@@ -19,7 +19,7 @@ class AdmissionService
         // Chuẩn hóa dữ liệu trước khi lưu
         $data = $this->prepareData($formData);
         $data['mhs'] = $mhs;
-        $data['status'] = $formData['Status'] ?? 'pending';
+        $data['status'] = $formData['Status'] ?? '';
 
         return AdmissionApplication::create($data);
     }
