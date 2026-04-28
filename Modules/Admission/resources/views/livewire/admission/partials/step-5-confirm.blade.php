@@ -13,7 +13,7 @@
             <option value="Lớp thường">Lớp thường</option>
             <option value="Tăng cường Tiếng Anh">Tăng cường Tiếng Anh</option>
             <option value="Tích hợp">Tích hợp</option>
-            <option value="Tăng cường TA + Toán & Khoa học">Tăng cường TA + Toán & Khoa học</option>
+            <option value="Tăng cường TA + Toán và Khoa học">Tăng cường TA + Toán & Khoa học</option>
         </select>
     </div>
 

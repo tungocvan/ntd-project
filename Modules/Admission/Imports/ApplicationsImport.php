@@ -52,9 +52,9 @@ class ApplicationsImport implements
                         }
 
                         // ❗ bỏ qua null → không overwrite
-                        // if ($value === null || $value === '') {
-                        //     continue;
-                        // }
+                        if ($value === null || $value === '') {
+                            continue;
+                        }
 
                         $data[$column] = $this->transformValue($column, $value);
                     }
