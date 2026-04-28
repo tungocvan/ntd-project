@@ -98,7 +98,7 @@ class AdmissionApplication extends Model
 
         static::updating(function ($model) {
             if (
-                ($model->getOriginal('status') === 'approved' || $model->getOriginal('status') === 'rejected') &&
+                ($model->getOriginal('status') === 'approved' || $model->getOriginal('status') === 'rejected' || $model->getOriginal('status') === '') &&
                 $model->isDirty() &&
                 !$model->isDirty('status') // ❗ thêm dòng này
             ) {

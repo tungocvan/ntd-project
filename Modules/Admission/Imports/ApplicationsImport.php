@@ -192,7 +192,7 @@ class ApplicationsImport implements
             'pending' => 'pending',
             'approved' => 'approved',
             'rejected' => 'rejected',
-            default => 'pending',
+            default => '',
         };
     }
 

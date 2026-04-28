@@ -10,6 +10,8 @@ class StatsOverview extends Component
     public $total = 0;
     public $pending = 0;
     public $approved = 0;
+    public $rejected = 0;
+    public $import = 0;
     public $classTypes = [];
 
     public function mount()
@@ -25,9 +27,15 @@ class StatsOverview extends Component
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        $this->pending = $statusCounts['pending'] ?? 0;
-        $this->approved = $statusCounts['approved'] ?? 0;
+        // đảm bảo luôn là số
+        $this->pending  = (int) ($statusCounts['pending'] ?? 0);
+        $this->approved = (int) ($statusCounts['approved'] ?? 0);
+        $this->rejected = (int) ($statusCounts['rejected'] ?? 0);
 
+        // tính import an toàn
+        $processed = $this->pending + $this->approved + $this->rejected;
+
+        $this->import = max(0, (int)$this->total - $processed);
         $this->classTypes = AdmissionApplication::selectRaw('loai_lop_dang_ky, COUNT(*) as total')
             ->groupBy('loai_lop_dang_ky')
             ->orderByDesc('total')

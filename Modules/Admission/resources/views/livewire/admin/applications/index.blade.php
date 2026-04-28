@@ -218,9 +218,13 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                             Biên nhận
                                         </a>
                                     @endif
-                                @else
+                                @elseif($item->status === 'rejected')
                                     <span class="px-2.5 py-1 text-xs bg-rose-100 text-rose-800 rounded-full">
                                         Từ chối
+                                    </span>
+                                @else
+                                    <span class="px-2.5 py-1 text-xs bg-rose-100 text-rose-800 rounded-full">
+                                        Import
                                     </span>
                                 @endif
                             </td>
