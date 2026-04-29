@@ -66,7 +66,7 @@ class RegistrationForm extends Component
         'QuanHeNguoiNuoiDuong' => '',
         'ConThu' => '',
         'TSAnhChiEm' => '',
-        'HoanThanhLopLa' => '',
+        'HoanThanhLopLa' => 'Có',
         'TruongMamNon' => '',
         'KhaNangHocSinh' => [],
         'SucKhoeCanLuuY' => [],
@@ -94,11 +94,11 @@ class RegistrationForm extends Component
 
         // STEP 5
         'LoaiLopDangKy' => 'Lớp thường',
-        'CK_GocHocTap' => false,
-        'CK_SachVo' => false,
-        'CK_HopPH' => false,
-        'CK_ThamGiaHD' => false,
-        'CK_GanGui' => false,
+        'CK_GocHocTap' => true,
+        'CK_SachVo' => true,
+        'CK_HopPH' => true,
+        'CK_ThamGiaHD' => true,
+        'CK_GanGui' => true,
 
         'NgayLamDon' => '',
         'NguoiLamDon' => '',
@@ -222,10 +222,10 @@ class RegistrationForm extends Component
                 'HoVaTenHocSinh' => $app->ho_va_ten_hoc_sinh,
                 'GioiTinh' => $app->gioi_tinh,
                 'NgaySinh' => $app->ngay_sinh,
-                'DanToc' => $app->dan_toc,
+                'DanToc' => $app->dan_toc ?? 'Kinh',
                 'MaDinhDanh' => $app->ma_dinh_danh,
-                'QuocTich' => $app->quoc_tich,
-                'TonGiao' => $app->ton_giao,
+                'QuocTich' => $app->quoc_tich ?? 'Việt Nam',
+                'TonGiao' => $app->ton_giao ?? 'Không',
                 'SDTEnetViet' => $app->sdt_enetviet,
                 'NoiSinh' => $app->noi_sinh,
                 'NoiSinhPx' => $app->noi_sinh_px,
@@ -253,7 +253,7 @@ class RegistrationForm extends Component
                 'QuanHeNguoiNuoiDuong' => $app->quan_he_nguoi_nuoi_duong,
                 'ConThu' => $app->con_thu,
                 'TSAnhChiEm' => $app->ts_anh_chi_em,
-                'HoanThanhLopLa' => $app->hoan_thanh_lop_la,
+                'HoanThanhLopLa' => $app->hoan_thanh_lop_la ?? 'Có',
                 'TruongMamNon' => $app->truong_mam_non,
 
                 // ⚠️ STRING → ARRAY
@@ -269,7 +269,7 @@ class RegistrationForm extends Component
                 'NamSinhCha'        => $app->nam_sinh_cha ?? '',
                 'TdvhCha'           => $app->tdvh_cha ?? '',
                 'TdcmCha'           => $app->tdcm_cha ?? '',
-                'NgheNghiepCha'     => $app->nghe_nghiep_cha ?? '',
+                'NgheNghiepCha'     => $app->nghe_nghiep_cha ?? 'LĐTD',
                 'ChuvuCha'          => $app->chuc_vu_cha ?? '',
                 'DienThoaiCha'      => $app->dien_thoai_cha ?? '',
                 'CCCDCha'           => $app->cccd_cha ?? '',
@@ -277,7 +277,7 @@ class RegistrationForm extends Component
                 'NamSinhMe'         => $app->nam_sinh_me ?? '',
                 'TdvhMe'            => $app->tdvh_me ?? '',
                 'TdcmMe'            => $app->tdcm_me ?? '',
-                'NgheNghiepMe'      => $app->nghe_nghiep_me ?? '',
+                'NgheNghiepMe'      => $app->nghe_nghiep_me ?? 'LĐTD',
                 'ChuvuMe'           => $app->chuc_vu_me ?? '',
                 'DienThoaiMe'       => $app->dien_thoai_me ?? '',
                 'CCCDMe'            => $app->cccd_me ?? '',
@@ -286,13 +286,13 @@ class RegistrationForm extends Component
                 'CCCDGiamHo'        => $app->cccd_giam_ho ?? '',
 
                 // STEP 5
-                'LoaiLopDangKy' => $app->loai_lop_dang_ky,
+                'LoaiLopDangKy' => $app->loai_lop_dang_ky ?? 'Lớp thường',
 
-                'CK_GocHocTap' => (bool)$app->ck_goc_hoc_tap,
-                'CK_SachVo' => (bool)$app->ck_sach_vo,
-                'CK_HopPH' => (bool)$app->ck_hop_ph,
-                'CK_ThamGiaHD' => (bool)$app->ck_tham_gia_hd,
-                'CK_GanGui' => (bool)$app->ck_gan_gui,
+                'CK_GocHocTap' => $app->ck_goc_hoc_tap ? (bool)$app->ck_goc_hoc_tap : true,
+                'CK_SachVo' => $app->ck_sach_vo ? (bool)$app->ck_sach_vo : true,
+                'CK_HopPH' => $app->ck_hop_ph ? (bool)$app->ck_hop_ph : true,
+                'CK_ThamGiaHD' => $app->ck_tham_gia_hd ? (bool)$app->ck_tham_gia_hd : true,
+                'CK_GanGui' => $app->ck_gan_gui ? (bool)$app->ck_gan_gui : true,
 
                 'NguoiLamDon' => $app->nguoi_lam_don,
             ];

@@ -3,11 +3,12 @@
 namespace Modules\Admission\Imports;
 
 use Modules\Admission\Models\AdmissionApplication;
+use App\Services\Data\DataTransformer;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
+use Illuminate\Support\Collection;
 
 use Maatwebsite\Excel\Concerns\{
     ToCollection,
@@ -15,109 +16,105 @@ use Maatwebsite\Excel\Concerns\{
     SkipsEmptyRows
 };
 
-use Illuminate\Support\Collection;
-
 class ApplicationsImport implements
     ToCollection,
     WithHeadingRow,
     SkipsEmptyRows
 {
+    /**
+     * ❌ KHÔNG IMPORT
+     */
     protected array $exceptFields = [
         'id',
-        'noi_sinh_chi_tiet',
         'created_at',
         'updated_at',
         'deleted_at',
+        'noi_sinh_chi_tiet',
     ];
 
+    protected DataTransformer $transformer;
+
+    public function __construct()
+    {
+        $this->transformer = app(DataTransformer::class);
+    }
+
+    /**
+     * 🚀 MAIN
+     */
     public function collection(Collection $rows)
     {
         DB::transaction(function () use ($rows) {
 
+            $model = new AdmissionApplication();
+
             foreach ($rows as $index => $row) {
+
+                $rowIndex = $index + 2; // vì có heading row
 
                 try {
 
                     $row = $row->toArray();
-                    Log::info('IMPORT ROW', ['row' => $row]);
 
-                    $data = [];
-
+                    /**
+                     * 🔤 Normalize column name
+                     */
+                    $normalizedRow = [];
                     foreach ($row as $key => $value) {
-
                         $column = $this->normalizeColumn($key);
-
-                        if (in_array($column, $this->exceptFields)) {
-                            continue;
-                        }
-
-                        // ❗ bỏ qua null → không overwrite
-                        if ($value === null || $value === '') {
-                            continue;
-                        }
-
-                        $data[$column] = $this->transformValue($column, $value);
+                        $normalizedRow[$column] = $value;
                     }
 
-                    // =========================
-                    // 🔥 KEY CHECK (BẮT BUỘC)
-                    // =========================
+                    /**
+                     * ❌ Remove except fields
+                     */
+                    foreach ($this->exceptFields as $field) {
+                        unset($normalizedRow[$field]);
+                    }
 
-                    $key = $data['ma_dinh_danh']
-                        ?? $data['mhs']
-                        ?? null;
-                    
+                    /**
+                     * 🔄 TRANSFORM DATA (CORE)
+                     */
+                    try {
+                        $data = $this->transformer->transformInput($model, $normalizedRow);
+                    } catch (\Throwable $e) {
 
-                    if (!$key) {
-                        Log::warning('SKIP - NO KEY', [
-                            'row_index' => $index,
-                            'row' => $row
-                        ]);
+                        $this->logFieldError($rowIndex, null, null, $e);
                         continue;
                     }
 
-               
+                    if (empty($data)) {
+                        continue;
+                    }
 
-                    // =========================
-                    // 🔥 FIND EXISTING
-                    // =========================
+                    /**
+                     * 🔑 KEY BẮT BUỘC
+                     */
+                    $key = $data['ma_dinh_danh']
+                        ?? $data['mhs']
+                        ?? null;
 
+                    if (!$key) {
+                        $this->logRowError($rowIndex, 'missing_key', $normalizedRow);
+                        continue;
+                    }
+
+                    /**
+                     * 🔍 UPSERT
+                     */
                     $record = AdmissionApplication::where('ma_dinh_danh', $key)
                         ->orWhere('mhs', $key)
                         ->first();
 
                     if ($record) {
-
-                        // ✅ CHỈ UPDATE FIELD CÓ TRONG FILE
-                        foreach ($data as $field => $value) {
-                            $record->$field = $value;
-                        }
-
-                        $record->save();
-
-                        Log::info('UPDATED', [
-                            'id' => $record->id,
-                            'key' => $key
-                        ]);
-
+                        $record->update($data);
                     } else {
-
                         AdmissionApplication::create($data);
-
-                        Log::info('CREATED', [
-                            'key' => $key
-                        ]);
                     }
 
                 } catch (\Throwable $e) {
 
-                    Log::error('IMPORT ERROR', [
-                        'row_index' => $index,
-                        'error' => $e->getMessage(),
-                        'row' => $row
-                    ]);
-
-                    // ❗ KHÔNG throw → không làm chết toàn bộ file
+                    $this->logRowError($rowIndex, $e->getMessage(), $row ?? []);
                     continue;
                 }
             }
@@ -126,30 +123,9 @@ class ApplicationsImport implements
 
     /**
      * =========================
-     * TRANSFORM
+     * 🧠 HELPERS
      * =========================
      */
-
-    protected function transformValue($column, $value)
-    {
-        // if ($column === 'gioi_tinh') {
-        //     return $this->normalizeGender($value);
-        // }
-
-        if ($column === 'status') {
-            return $this->normalizeStatus($value);
-        }
-
-        if ($this->isDateField($column)) {
-            return $this->parseDate($value);
-        }
-
-        if ($this->isArrayField($column)) {
-            return $this->parseJson($value);
-        }
-
-        return $value;
-    }
 
     protected function normalizeColumn($key)
     {
@@ -159,64 +135,28 @@ class ApplicationsImport implements
             ->toString();
     }
 
-    protected function isDateField($column): bool
-    {
-        return str_contains($column, 'ngay') ||
-               str_contains($column, 'date');
-    }
+    /**
+     * =========================
+     * 🚨 LOGGING
+     * =========================
+     */
 
-    protected function isArrayField($column): bool
+    protected function logFieldError($rowIndex, $field, $value, $e)
     {
-        return in_array($column, [
-            'kha_nang_hoc_sinh',
-            'suc_khoe_can_luu_y',
+        Log::error("IMPORT FIELD ERROR", [
+            'row'   => $rowIndex,
+            'field' => $field,
+            'value' => $value,
+            'error' => $e->getMessage(),
         ]);
     }
 
-    protected function normalizeGender($value)
+    protected function logRowError($rowIndex, $message, $row)
     {
-        $v = strtolower(trim($value));
-
-        return match ($v) {
-            'nam' => 'nam',
-            'nữ', 'nu' => 'nu',
-            default => null,
-        };
-    }
-
-    protected function normalizeStatus($value)
-    {
-        $v = strtolower(trim($value));
-
-        return match ($v) {
-            'pending' => 'pending',
-            'approved' => 'approved',
-            'rejected' => 'rejected',
-            default => '',
-        };
-    }
-
-    protected function parseDate($value)
-    {
-        try {
-            if (is_numeric($value)) {
-                return ExcelDate::excelToDateTimeObject($value)->format('Y-m-d');
-            }
-
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    protected function parseJson($value)
-    {
-        if (is_array($value)) return $value;
-
-        if (is_string($value)) {
-            return array_map('trim', explode(',', $value));
-        }
-
-        return null;
+        Log::error("IMPORT ROW ERROR", [
+            'row'   => $rowIndex,
+            'error' => $message,
+            'data'  => $row,
+        ]);
     }
 }

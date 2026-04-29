@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Symfony\Component\Process\Process;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class DocumentConverterService
 {
@@ -88,5 +89,23 @@ class DocumentConverterService
         $filename = pathinfo($inputPath, PATHINFO_FILENAME);
 
         return rtrim($outputDir, '/') . '/' . $filename . '.pdf';
+    }
+    public function generate(string $templatePath, array $data, string $outputPath): string
+    {
+        if (!file_exists($templatePath)) {
+            throw new \Exception('Template không tồn tại: ' . $templatePath);
+        }
+
+        $tp = new TemplateProcessor($templatePath);
+
+        foreach ($data as $key => $value) {
+            $tp->setValue($key, $value ?? '');
+        }
+
+        $tp->saveAs($outputPath);
+
+        chmod($outputPath, 0664);
+
+        return $outputPath;
     }
 }

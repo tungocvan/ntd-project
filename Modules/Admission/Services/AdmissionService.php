@@ -49,7 +49,7 @@ class AdmissionService
     private function prepareData(array $formData)
     {
         //$formData['KhaNangHocSinh'] = (array) ($formData['KhaNangHocSinh'] ?? []);
-        //dd($formData['KhaNangHocSinh']);
+       // dd($formData['KhaNangHocSinh']);
         $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
@@ -136,7 +136,8 @@ class AdmissionService
      */
     public function getDataForTemplate($id)
     {
-        $app = AdmissionApplication::findOrFail($id);
+        $app = AdmissionApplication::findOrFail($id);        
+         
         $data = [
             'MaHoSo'            => $app->mhs,
             'HoVaTenHocSinh'    => Str::upper($app->ho_va_ten_hoc_sinh),
@@ -202,7 +203,32 @@ class AdmissionService
             'Nam'               => Carbon::parse($app->created_at)->format('Y'),
             'NguoiLamDon'       => $app->nguoi_lam_don ?? '',
         ];
+        $data['THUONG'] = $app->loai_lop_dang_ky === 'Lớp thường' ? '☑' : '☐';
+        $data['TCTA'] = $app->loai_lop_dang_ky === 'Tăng cường Tiếng Anh' ? '☑' : '☐';
+        $data['TH'] = $app->loai_lop_dang_ky === 'Tích hợp' ? '☑' : '☐';
+        $data['TATOAN'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐'; 
+        $data['kn1'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐'; 
         // dd($data);
+
+        $options = [
+            'KN1' => 'Mạnh dạn tự tin',
+            'KN2' => 'Biết bơi',
+            'KN3' => 'Đã biết đọc, biết viết',
+            'KN4' => 'Biết đàn',
+            'KN5' => 'Biết hát',
+            'KN6' => 'Phát âm rõ ràng',
+        ];
+        if (is_string($app->kha_nang_hoc_sinh)) {
+            $skills = array_map('trim', explode(',', $app->kha_nang_hoc_sinh));
+        } elseif (is_array($app->kha_nang_hoc_sinh)) {
+            $skills = $app->kha_nang_hoc_sinh;
+         } else {
+            $skills = [];
+        }
+     
+        foreach ($options as $key => $label) {
+            $data[$key] = in_array($label, $skills) ? '☑' : '☐';
+        }
         return $data;
     }
 

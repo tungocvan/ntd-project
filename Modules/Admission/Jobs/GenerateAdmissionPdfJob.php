@@ -25,24 +25,19 @@ class GenerateAdmissionPdfJob implements ShouldQueue
         $this->id = $id;
     }
 
-
-
     public function handle(
         AdmissionService $service,
-        DocumentConverterService $converter
+        DocumentConverterService $converter,
+
     ) {
         $app = AdmissionApplication::find($this->id);
 
-        if (!$app) {
-            return;
-        }
-
-        // ❗ chỉ xử lý khi đã duyệt
-        if ($app->status !== 'approved') {
+        if (!$app || $app->status !== 'approved') {
             return;
         }
 
         try {
+
             // =========================
             // 🔥 DATA
             // =========================
@@ -54,7 +49,7 @@ class GenerateAdmissionPdfJob implements ShouldQueue
             $fullDir = storage_path('app/' . $relativeDir);
 
             // =========================
-            // 📁 ENSURE FOLDER
+            // 📁 FOLDER
             // =========================
             if (!is_dir($fullDir)) {
                 mkdir($fullDir, 0775, true);
@@ -72,7 +67,7 @@ class GenerateAdmissionPdfJob implements ShouldQueue
             $pdfFull  = $fullDir . $name . '.pdf';
 
             // =========================
-            // 🚀 Nếu PDF đã tồn tại → skip
+            // 🚀 SKIP nếu đã có PDF
             // =========================
             if (file_exists($pdfFull)) {
                 $app->updateQuietly([
@@ -83,57 +78,23 @@ class GenerateAdmissionPdfJob implements ShouldQueue
             }
 
             // =========================
-            // 📝 GENERATE WORD
+            // 📝 GENERATE DOCX (NEW SERVICE)
             // =========================
             $template = storage_path('app/templates/application.docx');
 
-                if (!file_exists($template)) {
-                    throw new \Exception('Template không tồn tại');
-                }
-
-                $tp = new \PhpOffice\PhpWord\TemplateProcessor($template);
-
-                foreach ($data as $key => $value) {
-                    $tp->setValue($key, $value ?? '');
-                }
-
-                $tp->saveAs($wordFull);
-
-                chmod($wordFull, 0664);
-            // if (!file_exists($wordFull)) {
-
-            //     $template = storage_path('app/templates/application.docx');
-
-            //     if (!file_exists($template)) {
-            //         throw new \Exception('Template không tồn tại');
-            //     }
-
-            //     $tp = new \PhpOffice\PhpWord\TemplateProcessor($template);
-
-            //     foreach ($data as $key => $value) {
-            //         $tp->setValue($key, $value ?? '');
-            //     }
-
-            //     $tp->saveAs($wordFull);
-
-            //     chmod($wordFull, 0664);
-            // }
+            $converter->generate($template, $data, $wordFull);
 
             // =========================
-            // 📄 CONVERT PDF (SERVICE)
+            // 📄 CONVERT PDF
             // =========================
             if (config('admission.enable_pdf_convert')) {
 
                 $pdfFull = $converter->toPdf($wordFull, $fullDir);
 
-                // =========================
-                // 🔍 VERIFY PDF
-                // =========================
                 if (!file_exists($pdfFull)) {
                     throw new \Exception('Convert xong nhưng không thấy file PDF');
                 }
             } else {
-                // ❌ Không convert → chỉ dùng Word
                 $pdfFull = null;
             }
 
@@ -152,4 +113,113 @@ class GenerateAdmissionPdfJob implements ShouldQueue
             ]);
         }
     }
+
+    // public function handle(
+    //     AdmissionService $service,
+    //     DocumentConverterService $converter
+    // ) {
+    //     $app = AdmissionApplication::find($this->id);
+
+    //     if (!$app) {
+    //         return;
+    //     }
+
+    //     // ❗ chỉ xử lý khi đã duyệt
+    //     if ($app->status !== 'approved') {
+    //         return;
+    //     }
+
+    //     try {
+    //         // =========================
+    //         // 🔥 DATA
+    //         // =========================
+    //         $data = $service->getDataForTemplate($this->id);
+
+    //         $name = 'Don_' . \Str::slug($data['HoVaTenHocSinh'] ?? 'unknown', '_');
+
+    //         $relativeDir = 'admission/';
+    //         $fullDir = storage_path('app/' . $relativeDir);
+
+    //         // =========================
+    //         // 📁 ENSURE FOLDER
+    //         // =========================
+    //         if (!is_dir($fullDir)) {
+    //             mkdir($fullDir, 0775, true);
+    //         }
+
+    //         chmod($fullDir, 0775);
+
+    //         // =========================
+    //         // 📄 PATH
+    //         // =========================
+    //         $wordRelative = $relativeDir . $name . '.docx';
+    //         $pdfRelative  = $relativeDir . $name . '.pdf';
+
+    //         $wordFull = $fullDir . $name . '.docx';
+    //         $pdfFull  = $fullDir . $name . '.pdf';
+
+    //         // =========================
+    //         // 🚀 Nếu PDF đã tồn tại → skip
+    //         // =========================
+    //         if (file_exists($pdfFull)) {
+    //             $app->updateQuietly([
+    //                 'pdf_path'  => $pdfRelative,
+    //                 'word_path' => $wordRelative,
+    //             ]);
+    //             return;
+    //         }
+
+    //         // =========================
+    //         // 📝 GENERATE WORD
+    //         // =========================
+    //         $template = storage_path('app/templates/application.docx');
+
+    //             if (!file_exists($template)) {
+    //                 throw new \Exception('Template không tồn tại');
+    //             }
+
+    //             $tp = new \PhpOffice\PhpWord\TemplateProcessor($template);
+
+    //             foreach ($data as $key => $value) {
+    //                 $tp->setValue($key, $value ?? '');
+    //             }
+
+    //             $tp->saveAs($wordFull);
+
+    //             chmod($wordFull, 0664);
+
+
+    //         // =========================
+    //         // 📄 CONVERT PDF (SERVICE)
+    //         // =========================
+    //         if (config('admission.enable_pdf_convert')) {
+
+    //             $pdfFull = $converter->toPdf($wordFull, $fullDir);
+
+    //             // =========================
+    //             // 🔍 VERIFY PDF
+    //             // =========================
+    //             if (!file_exists($pdfFull)) {
+    //                 throw new \Exception('Convert xong nhưng không thấy file PDF');
+    //             }
+    //         } else {
+    //             // ❌ Không convert → chỉ dùng Word
+    //             $pdfFull = null;
+    //         }
+
+    //         // =========================
+    //         // 💾 UPDATE DB
+    //         // =========================
+    //         $app->updateQuietly([
+    //             'pdf_path'  => $pdfFull ? $pdfRelative : null,
+    //             'word_path' => $wordRelative,
+    //         ]);
+    //     } catch (\Throwable $e) {
+
+    //         \Log::error('Generate Admission PDF lỗi', [
+    //             'id'    => $this->id,
+    //             'error' => $e->getMessage(),
+    //         ]);
+    //     }
+    // }
 }

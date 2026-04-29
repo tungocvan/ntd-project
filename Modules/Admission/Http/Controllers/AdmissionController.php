@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Maatwebsite\Excel\Facades\Excel;
 //se Modules\Admission\Exports\ApplicationsExport;
-use Modules\Admission\Imports\ApplicationsImport;
+//use Modules\Admission\Imports\ApplicationsImport;
 use Illuminate\Support\Facades\Storage;
+use App\Services\Data\Import\GenericImport;
 use Modules\Admission\Models\AdmissionApplication;
 
 
@@ -161,8 +162,14 @@ class AdmissionController extends Controller
 
     public function import(Request $request)
     {
-        Excel::import(new ApplicationsImport, $request->file('file'));
-
+        
+        Excel::import(
+            new GenericImport(
+                AdmissionApplication::class,
+                ['ma_dinh_danh', 'mhs'] // unique key
+            ),
+            $request->file('file')
+        );
         return back()->with('success', 'Import thành công');
     }
     public function download($id, $type)
