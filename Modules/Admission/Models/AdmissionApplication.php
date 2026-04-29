@@ -88,7 +88,11 @@ class AdmissionApplication extends Model
         'pdf_path',
         'word_path'
     ];
+  
     protected $casts = [
+        'ngay_sinh' => 'date',
+        'skills' => 'array',
+        'ck_goc_hoc_tap' => 'boolean',
         'kha_nang_hoc_sinh' => 'array',
         'suc_khoe_can_luu_y' => 'array',
     ];

@@ -108,6 +108,7 @@ class GenericImport implements
                     if ($record) {
                         $record->update($data);
                     } else {
+                        //dd($data);
                         $this->modelClass::create($data);
                     }
 

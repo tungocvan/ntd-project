@@ -46,14 +46,17 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
             class="w-full h-11 px-4 rounded-xl border border-gray-300 bg-white text-sm shadow-sm
 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
             <option value="">Tất cả lớp</option>
+            <option value="Lớp thường">Lớp thường</option>
             <option value="Tăng cường Tiếng Anh">Tăng cường Tiếng Anh</option>
-            <option value="Lớp tiếng Anh tích hợp">Lớp tích hợp</option>
+            <option value="Tích hợp">Tích hợp</option>
+            <option value="Tăng cường TA + Toán và Khoa học">Tăng cường TA + Toán & Khoa học</option> 
         </select>
 
         <select wire:model.live="filterStatus"
             class="w-full h-11 px-4 rounded-xl border border-gray-300 bg-white text-sm shadow-sm
 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
             <option value="">Tất cả trạng thái</option>
+            <option value="import">Import</option>
             <option value="pending">Chờ duyệt</option>
             <option value="approved">Đã duyệt</option>
             <option value="rejected">Từ chối</option>
@@ -154,7 +157,7 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
 
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Học sinh</th>
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Lớp</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600">Ngày</th>
+                        <th class="px-6 py-4 text-left font-semibold text-gray-600">Ngày sinh</th>
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Trạng thái</th>
                         <th class="px-6 py-4 text-right font-semibold text-gray-600">Thao tác</th>
                     </tr>
@@ -185,8 +188,8 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                 </span>
                             </td>
 
-                            <td class="px-6 py-4 text-gray-500">
-                                {{ $item->created_at->format('d/m/Y') }}
+                            <td class="px-6 py-4 text-gray-500">                                
+                                {{ $item->ngay_sinh->format('d/m/Y') }}
                             </td>
 
                             <td class="px-6 py-4">

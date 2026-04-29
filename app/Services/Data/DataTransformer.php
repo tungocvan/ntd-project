@@ -33,6 +33,7 @@ class DataTransformer
                 $casts[$column] ?? null,
                 $value
             );
+
         }
 
         return $data;
@@ -55,6 +56,7 @@ class DataTransformer
                 $value
             );
         }
+
 
         return $data;
     }

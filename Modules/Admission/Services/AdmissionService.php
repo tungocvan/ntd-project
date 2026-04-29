@@ -48,13 +48,14 @@ class AdmissionService
      */
     private function prepareData(array $formData)
     {
-        //$formData['KhaNangHocSinh'] = (array) ($formData['KhaNangHocSinh'] ?? []);
+        //$formData['KhaNangHocSinoh'] = (array) ($f
+  
        // dd($formData['KhaNangHocSinh']);
         $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
             'gioi_tinh'          => $formData['GioiTinh'] ?? null,
-            'ngay_sinh'          => !empty($formData['NgaySinh']) ? Carbon::parse($formData['NgaySinh'])->format('Y-m-d') : null,
+            'ngay_sinh'          => !empty($formData['NgaySinh']) ?  Carbon::parse($formData['NgaySinh'])->format('d-m-Y')  : null,
             'dan_toc'            => $formData['DanToc'] ?? null,
             'ma_dinh_danh'       => $formData['MaDinhDanh'] ?? null,
             'quoc_tich'          => $formData['QuocTich'] ?? null,

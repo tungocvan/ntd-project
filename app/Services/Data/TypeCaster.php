@@ -12,22 +12,48 @@ class TypeCaster
      * INPUT (IMPORT / API)
      * =========================
      */
-    public function castInput(?string $type, $value, ?string $column = null)
+    public function castInput($type, $value)
     {
-        if ($value === null || $value === '') {
-            return null;
+        if (!$type) {
+            return $value;
         }
 
-        return match ($type) {
+        // 🔥 FIX: tách type chính
+        $baseType = explode(':', $type)[0];
 
-            'date', 'datetime' => $this->parseDate($value, $column),
+        switch ($baseType) {
 
-            'array', 'json' => $this->parseArray($value),
+            case 'date':                
+                // Excel serial
+                if (is_numeric($value)) {
+                    $number = (int) $value;
+                      
+                    if ($number > 1000 && $number < 60000) {
+                        $temp = ExcelDate::excelToDateTimeObject($number);
+                        //dd($number, $temp->format('d/m/Y'));
+                        return $temp->format('Y-m-d');
+                       
+                    }
+                }
 
-            'boolean' => $this->parseBoolean($value),
+                // string formats
+                try {
+                    return \Carbon\Carbon::createFromFormat('Y-m-d', $value)->format('Y-m-d');
+                } catch (\Exception $e) {}
 
-            default => $this->cleanPrimitive($value),
-        };
+                try {
+                    return \Carbon\Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+                } catch (\Exception $e) {}
+
+                try {
+                    return \Carbon\Carbon::createFromFormat('d/m/y', $value)->format('Y-m-d');
+                } catch (\Exception $e) {}
+
+                return null;
+
+            default:
+                return $value;
+        }
     }
 
     /**
@@ -40,7 +66,7 @@ class TypeCaster
         if ($value === null) {
             return '';
         }
-
+            
         return match ($type) {
 
             'date', 'datetime' => $this->formatDate($value),
@@ -60,14 +86,16 @@ class TypeCaster
      */
     protected function parseDate($value, ?string $column = null)
     {
+        
         try {
 
-            $value = trim((string) $value);
+         //$value = trim((string) $value);
 
             /**
              * 1. Excel numeric (45123)
              */
-            if (is_numeric($value) && strlen($value) > 5) {
+            if (is_numeric($value)) {
+                // dd($value);
                 return ExcelDate::excelToDateTimeObject($value)
                     ->format('Y-m-d');
             }
@@ -101,7 +129,6 @@ class TypeCaster
              * FAIL
              */
             throw new \Exception();
-
         } catch (\Exception $e) {
 
             $field = $column ?? 'date';

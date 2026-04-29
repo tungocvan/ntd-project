@@ -10,12 +10,12 @@ return new class extends Migration {
         Schema::create('admission_applications', function (Blueprint $table) {
             $table->id();
             $table->string('mhs')->unique();
-            $table->string('status')->default('pending');
+            $table->string('status')->nullable();
 
             // BƯỚC 1: Thông tin học sinh
             $table->string('ho_va_ten_hoc_sinh')->nullable();
             $table->string('gioi_tinh')->nullable();
-            $table->string('ngay_sinh')->nullable();
+            $table->date('ngay_sinh')->nullable();
             $table->string('dan_toc')->nullable();
             $table->string('ma_dinh_danh')->nullable();
             $table->string('quoc_tich')->nullable();
