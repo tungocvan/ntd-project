@@ -30,7 +30,7 @@
             <div>
                 <label class="text-sm font-medium">CCCD</label>
                 <input type="text"
-                       wire:model="form.CCCDCha"
+                       wire:model="form.CCCDCha" 
                        class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition">
             </div>
 
