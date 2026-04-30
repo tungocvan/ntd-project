@@ -203,7 +203,7 @@ class AdmissionService
             'Ngay'              => Carbon::parse($app->created_at)->format('d'),
             'Thang'             => Carbon::parse($app->created_at)->format('m'),
             'Nam'               => Carbon::parse($app->created_at)->format('Y'),
-            'NguoiLamDon'       => $app->nguoi_lam_don  ==='' ? $app->ho_ten_me : '',
+            'NguoiLamDon'       => $app->nguoi_lam_don  ?? '' ,
         ];
         $data['THUONG'] = $app->loai_lop_dang_ky === 'Lớp thường' ? '☑' : '☐';
         $data['TCTA'] = $app->loai_lop_dang_ky === 'Tăng cường Tiếng Anh' ? '☑' : '☐';
