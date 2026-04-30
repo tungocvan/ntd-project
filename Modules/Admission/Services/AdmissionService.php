@@ -50,7 +50,7 @@ class AdmissionService
     {
         //$formData['KhaNangHocSinoh'] = (array) ($f
   
-       // dd($formData['KhaNangHocSinh']);
+      
         $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
@@ -112,10 +112,10 @@ class AdmissionService
             'dien_thoai_me'      => $formData['DienThoaiMe'] ?? null,
             'cccd_me'            => $formData['CCCDMe'] ?? null,
 
-            'ho_ten_nguoi_giam_ho' => $formData['HoTenNguoiGiamHo'] ?? null,
+            'ho_ten_nguoi_giam_ho' => $formData['HoTenNguoiGiamHo'] === '' ? $formData['HoTenMe'] : null,
             'quan_he_giam_ho'      => $formData['QuanHeGiamHo'] ?? null,
-            'dien_thoai_giam_ho'   => $formData['DienThoaiGiamHo'] ?? null,
-            'cccd_giam_ho'         => $formData['CCCDGiamHo'] ?? null,
+            'dien_thoai_giam_ho'   => $formData['DienThoaiGiamHo'] === '' ? $formData['DienThoaiMe'] : null,
+            'cccd_giam_ho'         => $formData['CCCDGiamHo'] === '' ? $formData['CCCDMe'] : null,
 
             // 5. Đăng ký & Checkbox cam kết
             'anh_chi_ruot_trong_truong' => $formData['AnhChiRuotTrongTruong'] ?? null,
@@ -129,6 +129,7 @@ class AdmissionService
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
             'nguoi_lam_don'             => $formData['NguoiLamDon'] ?? null,
         ];
+       // dd($data);
         return $data;
     }
 

@@ -7,6 +7,7 @@ use Modules\Admission\Models\AdmissionLocation;
 use Modules\Admission\Models\AdmissionCatalog;
 use Modules\Admission\Models\AdmissionApplication;
 use Modules\Admission\Services\AdmissionService;
+use Carbon\Carbon;
 
 class RegistrationForm extends Component
 {
@@ -220,8 +221,9 @@ class RegistrationForm extends Component
             $this->form = [
                 // STEP 1
                 'HoVaTenHocSinh' => $app->ho_va_ten_hoc_sinh,
-                'GioiTinh' => $app->gioi_tinh,
-                'NgaySinh' => $app->ngay_sinh,
+                'Status' => 'pending',
+                'GioiTinh' => $app->gioi_tinh, 
+                'NgaySinh' => $app->ngay_sinh ? Carbon::parse($app->ngay_sinh)->format('Y-m-d') : '',
                 'DanToc' => $app->dan_toc ?? 'Kinh',
                 'MaDinhDanh' => $app->ma_dinh_danh,
                 'QuocTich' => $app->quoc_tich ?? 'Việt Nam',
@@ -281,9 +283,9 @@ class RegistrationForm extends Component
                 'ChuvuMe'           => $app->chuc_vu_me ?? '',
                 'DienThoaiMe'       => $app->dien_thoai_me ?? '',
                 'CCCDMe'            => $app->cccd_me ?? '',
-                'HoTenNguoiGiamHo'  => $app->ho_ten_nguoi_giam_ho ?? '',
-                'DienThoaiGiamHo'   => $app->dien_thoai_giam_ho ?? '',
-                'CCCDGiamHo'        => $app->cccd_giam_ho ?? '',
+                'HoTenNguoiGiamHo'  => $app->ho_ten_nguoi_giam_ho ?? $app->ho_ten_me ?? '',
+                'DienThoaiGiamHo'   => $app->dien_thoai_giam_ho ?? $app->dien_thoai_me ?? '',
+                'CCCDGiamHo'        => $app->cccd_giam_ho ?? $app->cccd_me  ?? '',
 
                 // STEP 5
                 'LoaiLopDangKy' => $app->loai_lop_dang_ky ?? 'Lớp thường',
@@ -328,6 +330,7 @@ class RegistrationForm extends Component
         if ($field === 'form.QueQuanTt') {
             $this->que_quan_wards = AdmissionLocation::where('province_name', $this->form['QueQuanTt'])->get()->toArray();
         }
+        
     }
 
     public function updatedCopyNoiSinhToQueQuan($value)
@@ -352,6 +355,7 @@ class RegistrationForm extends Component
             $this->ht_wards = $this->tt_wards;
         }
     }
+   
 
     public function updatedForm($value, $key)
     {
