@@ -112,10 +112,10 @@ class AdmissionService
             'dien_thoai_me'      => $formData['DienThoaiMe'] ?? null,
             'cccd_me'            => $formData['CCCDMe'] ?? null,
 
-            'ho_ten_nguoi_giam_ho' => $formData['HoTenNguoiGiamHo'] === '' ? $formData['HoTenMe'] : null,
+            'ho_ten_nguoi_giam_ho' => $formData['HoTenNguoiGiamHo'] === '' ? $formData['HoTenMe'] : $formData['HoTenNguoiGiamHo'],
             'quan_he_giam_ho'      => $formData['QuanHeGiamHo'] ?? null,
-            'dien_thoai_giam_ho'   => $formData['DienThoaiGiamHo'] === '' ? $formData['DienThoaiMe'] : null,
-            'cccd_giam_ho'         => $formData['CCCDGiamHo'] === '' ? $formData['CCCDMe'] : null,
+            'dien_thoai_giam_ho'   => $formData['DienThoaiGiamHo'] === '' ? $formData['DienThoaiMe'] : $formData['DienThoaiGiamHo'],
+            'cccd_giam_ho'         => $formData['CCCDGiamHo'] === '' ? $formData['CCCDMe'] : $formData['CCCDGiamHo'],
 
             // 5. Đăng ký & Checkbox cam kết
             'anh_chi_ruot_trong_truong' => $formData['AnhChiRuotTrongTruong'] ?? null,
@@ -127,7 +127,7 @@ class AdmissionService
             'ck_tham_gia_hd'            => filter_var($formData['CK_ThamGiaHD'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'ck_gan_gui'                => filter_var($formData['CK_GanGui'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
-            'nguoi_lam_don'             => $formData['NguoiLamDon'] === '' ? $formData['HoTenMe'] : null,
+            'nguoi_lam_don'             => $formData['NguoiLamDon'] === '' ? $formData['HoTenMe'] : $formData['NguoiLamDon'],
         ];
        // dd($data);
         return $data;
@@ -203,7 +203,7 @@ class AdmissionService
             'Ngay'              => Carbon::parse($app->created_at)->format('d'),
             'Thang'             => Carbon::parse($app->created_at)->format('m'),
             'Nam'               => Carbon::parse($app->created_at)->format('Y'),
-            'NguoiLamDon'       => $app->nguoi_lam_don ?? '',
+            'NguoiLamDon'       => $app->nguoi_lam_don  ==='' ? $app->ho_ten_me : '',
         ];
         $data['THUONG'] = $app->loai_lop_dang_ky === 'Lớp thường' ? '☑' : '☐';
         $data['TCTA'] = $app->loai_lop_dang_ky === 'Tăng cường Tiếng Anh' ? '☑' : '☐';
