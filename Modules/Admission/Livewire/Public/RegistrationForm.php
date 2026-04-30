@@ -185,9 +185,7 @@ class RegistrationForm extends Component
 
     protected $rules = [
         'form.HoVaTenHocSinh' => 'required|min:5',
-        'form.MaDinhDanh' => 'required|digits:12',
-        'form.LoaiLopDangKy' => 'required',
-        'form.NguoiLamDon' => 'required',
+        'form.MaDinhDanh' => 'required|digits:12',   
     ];
 
     // public function mount()
@@ -296,7 +294,7 @@ class RegistrationForm extends Component
                 'CK_ThamGiaHD' => $app->ck_tham_gia_hd ? (bool)$app->ck_tham_gia_hd : true,
                 'CK_GanGui' => $app->ck_gan_gui ? (bool)$app->ck_gan_gui : true,
 
-                'NguoiLamDon' => $app->nguoi_lam_don,
+                'NguoiLamDon' => $app->nguoi_lam_don ?? '',
             ];
 
             // Load wards nếu có

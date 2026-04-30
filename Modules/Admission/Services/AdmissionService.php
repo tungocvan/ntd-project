@@ -127,7 +127,7 @@ class AdmissionService
             'ck_tham_gia_hd'            => filter_var($formData['CK_ThamGiaHD'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'ck_gan_gui'                => filter_var($formData['CK_GanGui'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
-            'nguoi_lam_don'             => $formData['NguoiLamDon'] ?? null,
+            'nguoi_lam_don'             => $formData['NguoiLamDon'] === '' ? $formData['HoTenMe'] : null,
         ];
        // dd($data);
         return $data;
