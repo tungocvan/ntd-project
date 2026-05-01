@@ -43,103 +43,125 @@
     </form>
 
     @if ($showModal)
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 
-       flex items-center justify-center 
-       px-4 py-6 md:py-10 lg:py-16">
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 
+            flex items-center justify-center 
+            px-3 py-4 md:px-4 md:py-10 lg:py-16">
 
-            <div class="relative w-full max-w-5xl ">
-                <div class="relative text-white rounded-3xl shadow-2xl overflow-hidden px-12 py-2  max-h-[95vh]"
-                    style="background: linear-gradient(135deg, #0f4c5c, #0a3d47);">
+    <div class="relative w-full max-w-5xl max-h-[95vh] overflow-y-auto">
 
-                    {{-- CLOSE (RIGHT) --}}
-                    <button wire:click="closeModal"
-                        class="absolute top-5 right-5 bg-white text-gray-700 w-10 h-10 rounded-full shadow flex items-center justify-center hover:bg-gray-100 transition">
-                        ✕
-                    </button>
+        <div class="relative text-white rounded-2xl md:rounded-3xl shadow-2xl 
+                    overflow-hidden 
+                    px-4 py-6 md:px-12 md:py-[50px]"
+             style="background: linear-gradient(135deg, #0f4c5c, #0a3d47);">
 
-                    {{-- HEADER (CÂN LOGO + TEXT) --}}
-                    <div class="flex items-center justify-center gap-4 mb-6">
+            {{-- CLOSE --}}
+            <button wire:click="closeModal"
+                class="absolute top-3 right-3 md:top-5 md:right-5 
+                       bg-white text-gray-700 
+                       w-9 h-9 md:w-10 md:h-10 
+                       rounded-full shadow flex items-center justify-center hover:bg-gray-100">
+                ✕
+            </button>
 
-                        <img src="{{ asset('storage/admission/img/logo-ntd.png') }}" class="w-32 h-32 object-contain">
+            {{-- HEADER --}}
+            <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6 text-center md:text-left">
 
-                        <div class="text-center  text-2xl">
-                            <p class=" font-semibold tracking-wide">
-                                ỦY BAN NHÂN DÂN PHƯỜNG TÂN THUẬN
-                            </p>
-                            <p class=" font-semibold tracking-wide">
-                                TRƯỜNG TIỂU HỌC NGUYỄN THỊ ĐỊNH
-                            </p>
-                        </div>
-                    </div>
+                <img src="{{ asset('storage/admission/img/logo-ntd.png') }}"
+                     class="hidden md:block w-16 h-16 md:w-28 md:h-28 object-contain">
 
-                    {{-- TITLE --}}
-                    <div class="text-center mb-6">
-                        <h1 class="font-bold text-lg uppercase">
-                            HỘI ĐỒNG TUYỂN SINH LỚP 1
-                        </h1>
-
-                        <h3 class="font-bold text-lg uppercase">
-                            TRƯỜNG TIỂU HỌC NGUYỄN THỊ ĐỊNH
-                        </h3>
-
-                        <h1 class="text-3xl font-extrabold mt-3 tracking-wide">
-                            ĐÃ TIẾP NHẬN HỒ SƠ
-                        </h1>
-                    </div>
-
-                    {{-- CONTENT --}}
-                    <div class="max-w-2xl mx-auto text-sm md:text-base">
-
-                        <table class="w-[90%]">
-                            <tr>
-                                <td class="w-44 py-2">Học sinh:</td>
-                                <td class="border-b border-white/20"> {{ $app['ho_va_ten_hoc_sinh'] }}</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">Ngày sinh:</td>
-                                <td class="border-b border-white/20">{{ \Carbon\Carbon::parse($app['ngay_sinh'])->format('d/m/Y') }}</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">Mã định danh:</td>
-                                <td class="border-b border-white/20">{{ $app['ma_dinh_danh'] }}</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">Mã hồ sơ:</td>
-                                <td class="border-b border-white/20">{{ $app['mhs'] }}</td>
-                            </tr>
-                        </table>
-
-                        <div class="text-center mt-8 mb-5 font-semibold tracking-wide">
-                            HỌC SINH ĐƯỢC PHÂN VÀO LỚP
-                        </div>
-
-                        <table class="w-[90%]">
-                            <tr>
-                                <td class="w-44 py-2">➤ Lớp:</td>
-                                <td class="border-b border-white/20"></td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">➤ GVCN:</td>
-                                <td class="border-b border-white/20"></td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">➤ Bảo mẫu:</td>
-                                <td class="border-b border-white/20"></td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    {{-- LEFT IMAGE (TĂNG NHẸ) --}}
-                    <img src="{{ asset('storage/admission/img/left.png') }}"
-                        class="absolute bottom-6 left-0 w-[200px] h-[133px] object-contain opacity-95">
-                    <img src="{{ asset('storage/admission/img/right.png') }}"
-                        class="absolute bottom-4 right-0 w-[200px] h-[133px] object-contain opacity-95">
-
-
-
+                <div class="text-sm md:text-xl leading-tight">
+                    <p class="font-semibold tracking-wide">
+                        ỦY BAN NHÂN DÂN PHƯỜNG TÂN THUẬN
+                    </p>
+                    <p class="font-semibold tracking-wide">
+                        TRƯỜNG TIỂU HỌC NGUYỄN THỊ ĐỊNH
+                    </p>
                 </div>
             </div>
+
+            {{-- TITLE --}}
+            <div class="text-center mb-5 md:mb-6">
+                <h2 class="font-bold text-sm md:text-lg uppercase">
+                    HỘI ĐỒNG TUYỂN SINH LỚP 1
+                </h2>
+
+                <h3 class="font-bold text-sm md:text-lg uppercase">
+                    TRƯỜNG TIỂU HỌC NGUYỄN THỊ ĐỊNH
+                </h3>
+
+                <h1 class="text-xl md:text-3xl font-extrabold mt-2 md:mt-3 tracking-wide">
+                    ĐÃ TIẾP NHẬN HỒ SƠ
+                </h1>
+            </div>
+
+            {{-- CONTENT --}}
+            <div class="space-y-6">
+
+                {{-- INFO TABLE --}}
+                <div class="max-w-xl md:max-w-2xl mx-auto">
+                    <table class="w-full text-sm md:text-base">
+                        <tr>
+                            <td class="w-40 md:w-44 py-2">Học sinh:</td>
+                            <td class="border-b border-white/20 text-right font-medium">
+                                {{ $app['ho_va_ten_hoc_sinh'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Ngày sinh:</td>
+                            <td class="border-b border-white/20 text-right">
+                                {{ \Carbon\Carbon::parse($app['ngay_sinh'])->format('d/m/Y') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Mã định danh:</td>
+                            <td class="border-b border-white/20 text-right">
+                                {{ $app['ma_dinh_danh'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Mã hồ sơ:</td>
+                            <td class="border-b border-white/20 text-right">
+                                {{ $app['mhs'] }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                {{-- SUB TITLE --}}
+                <div class="text-center font-semibold tracking-wide">
+                    HỌC SINH ĐƯỢC PHÂN VÀO LỚP
+                </div>
+
+                {{-- CLASS TABLE --}}
+                <div class="max-w-xl md:max-w-2xl mx-auto">
+                    <table class="w-full text-sm md:text-base">
+                        <tr>
+                            <td class="w-40 md:w-44 py-2">➤ Lớp:</td>
+                            <td class="border-b border-white/20"></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">➤ GVCN:</td>
+                            <td class="border-b border-white/20"></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">➤ Bảo mẫu:</td>
+                            <td class="border-b border-white/20"></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            {{-- IMAGES (ẨN MOBILE) --}}
+            <img src="{{ asset('storage/admission/img/left.png') }}"
+                class="hidden md:block absolute bottom-6 left-6 w-[180px] h-[120px] object-contain opacity-95">
+
+            <img src="{{ asset('storage/admission/img/right.png') }}"
+                class="hidden md:block absolute bottom-6 right-6 w-[180px] h-[120px] object-contain opacity-95">
+
         </div>
-    @endif
+    </div>
+</div>
+@endif
 
 </div>
