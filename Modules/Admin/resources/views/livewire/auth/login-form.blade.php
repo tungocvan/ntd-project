@@ -90,12 +90,12 @@
     <a href="{{ route('google') }}"
         class="mt-5 flex items-center justify-center gap-2 w-full px-4 py-2 border border-gray-200 rounded-lg bg-white hover:bg-gray-50 transition">
 
-        <svg class="w-5 h-5" viewBox="0 0 48 48">
+        {{-- <svg class="w-5 h-5" viewBox="0 0 48 48">
             <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303..."></path>
             <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819..."></path>
             <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977..."></path>
             <path fill="#1976D2" d="M43.611,20.083H42V20H24v8..."></path>
-        </svg>
+        </svg> --}}
 
         <span class="text-sm font-medium text-gray-700">
             Đăng nhập bằng Google Workspace
