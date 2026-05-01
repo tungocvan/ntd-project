@@ -31,6 +31,8 @@ Route::middleware(['web','auth:admin'])
     ->name('admission.')
     ->group(function () {
     Route::get('/register', [AdmissionController::class, 'index'])->name('register');
+    Route::get('/search/{ma_dinh_danh?}/{password?}', [AdmissionController::class, 'search'])
+    ->name('search');
     Route::get('/download-pdf/{id}', [AdmissionController::class, 'downloadPdf'])->name('download-pdf');
     Route::get('/download-word/{id}', [AdmissionController::class, 'downloadDocx'])->name('download-word');
     Route::get('/{id}/download/{type}', [AdmissionController::class, 'download'])

@@ -51,6 +51,13 @@ class AdmissionController extends Controller
     {
         return view('Admission::pages.admin.dvhc');
     }
+    public function search($ma_dinh_danh = null, $password = null)
+    {
+        return view('Admission::pages.public.search', [
+            'ma_dinh_danh' => $ma_dinh_danh ?? '',
+            'password' => $password ?? '',
+        ]);
+    }
 
     /**
      * Giao diện chỉnh sửa đơn (Admin CRUD)
@@ -58,7 +65,7 @@ class AdmissionController extends Controller
     public function adminEdit($id)
     {
 
-        return view('Admission::pages.admin.create',compact('id'));
+        return view('Admission::pages.admin.create', compact('id'));
         // $application = AdmissionApplication::findOrFail($id);
         // return view('Admission::pages.admin.edit', compact('application'));
     }
@@ -111,8 +118,10 @@ class AdmissionController extends Controller
             $process = new Process([
                 'libreoffice',
                 '--headless',
-                '--convert-to', 'pdf',
-                '--outdir', $tempDir,
+                '--convert-to',
+                'pdf',
+                '--outdir',
+                $tempDir,
                 $wordPath
             ]);
 
@@ -130,7 +139,6 @@ class AdmissionController extends Controller
 
             // 5. TRẢ VỀ FILE (Không xóa file để lần sau dùng lại làm cache)
             return response()->download($pdfPath);
-
         } catch (\Exception $e) {
             \Log::error('Lỗi xuất PDF: ' . $e->getMessage());
             return back()->with('error', 'Lỗi khi xuất PDF: ' . $e->getMessage());
@@ -162,7 +170,7 @@ class AdmissionController extends Controller
 
     public function import(Request $request)
     {
-        
+
         Excel::import(
             new GenericImport(
                 AdmissionApplication::class,

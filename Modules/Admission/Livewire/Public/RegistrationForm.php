@@ -185,7 +185,7 @@ class RegistrationForm extends Component
 
     protected $rules = [
         'form.HoVaTenHocSinh' => 'required|min:5',
-        'form.MaDinhDanh' => 'required|digits:12',   
+        'form.MaDinhDanh' => 'required|digits:12',
     ];
 
     // public function mount()
@@ -220,7 +220,7 @@ class RegistrationForm extends Component
                 // STEP 1
                 'HoVaTenHocSinh' => $app->ho_va_ten_hoc_sinh,
                 'Status' => 'pending',
-                'GioiTinh' => $app->gioi_tinh, 
+                'GioiTinh' => $app->gioi_tinh,
                 'NgaySinh' => $app->ngay_sinh ? Carbon::parse($app->ngay_sinh)->format('Y-m-d') : '',
                 'DanToc' => $app->dan_toc ?? 'Kinh',
                 'MaDinhDanh' => $app->ma_dinh_danh,
@@ -306,6 +306,11 @@ class RegistrationForm extends Component
         }
     }
 
+    public function setStep($step)
+    {
+        $this->currentStep = $step;
+    }
+
     public function updated($field)
     {
         if ($field === 'form.TTTTP') {
@@ -328,7 +333,6 @@ class RegistrationForm extends Component
         if ($field === 'form.QueQuanTt') {
             $this->que_quan_wards = AdmissionLocation::where('province_name', $this->form['QueQuanTt'])->get()->toArray();
         }
-        
     }
 
     public function updatedCopyNoiSinhToQueQuan($value)
@@ -353,7 +357,7 @@ class RegistrationForm extends Component
             $this->ht_wards = $this->tt_wards;
         }
     }
-   
+
 
     public function updatedForm($value, $key)
     {

@@ -5,6 +5,8 @@ namespace Modules\Admission\Services;
 use Modules\Admission\Models\AdmissionApplication;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class AdmissionService
 {
@@ -42,15 +44,15 @@ class AdmissionService
         $application->update($data);
         return $application;
     }
-  
+
     /**
      * HÀM CHUẨN HÓA DỮ LIỆU TRUNG TÂM (Tránh lỗi SQL 1366 và lỗi định dạng)
      */
     private function prepareData(array $formData)
     {
         //$formData['KhaNangHocSinoh'] = (array) ($f
-  
-      
+
+
         $data = [
             // 1. Thông tin học sinh
             'ho_va_ten_hoc_sinh' => $formData['HoVaTenHocSinh'] ?? null,
@@ -66,7 +68,7 @@ class AdmissionService
             'noi_sinh'           => $formData['NoiSinh'] ?? null,
             'noi_sinh_chi_tiet'  => $formData['NoiSinh'] ?? '',
             'noi_dang_ky_khai_sinh_px' => $formData['NoiDangKyKhaiSinhPx'] ?? null,
-            'noi_dang_ky_khai_sinh_tt' => $formData['NoiDangKyKhaiSinhTt'] ?? null, 
+            'noi_dang_ky_khai_sinh_tt' => $formData['NoiDangKyKhaiSinhTt'] ?? null,
             'que_quan_px'        => $formData['QueQuanPx'] ?? null,
             'que_quan_tt'        => $formData['QueQuanTt'] ?? null,
             'que_quan'           => $formData['QueQuanPx'] . ", " . $formData['QueQuanTt'] ?? '',
@@ -129,17 +131,27 @@ class AdmissionService
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
             'nguoi_lam_don'             => $formData['NguoiLamDon'] === '' ? $formData['HoTenMe'] : $formData['NguoiLamDon'],
         ];
-       // dd($data);
+        // dd($data);
         return $data;
     }
+    public function generateQrImage($url)
+    {
+        $fileName = 'qr_' . Str::random(10) . '.png';
+        $path = storage_path("app/public/{$fileName}");
 
+        QrCode::format('png')
+            ->size(300)
+            ->generate($url, $path);
+
+        return $path;
+    }
     /**
      * DỮ LIỆU ĐỔ VÀO WORD (Sử dụng key của file Word mẫu)
      */
     public function getDataForTemplate($id)
     {
-        $app = AdmissionApplication::findOrFail($id);        
-         
+        $app = AdmissionApplication::findOrFail($id);
+
         $data = [
             'MaHoSo'            => $app->mhs,
             'HoVaTenHocSinh'    => Str::upper($app->ho_va_ten_hoc_sinh),
@@ -155,7 +167,7 @@ class AdmissionService
             'NoiSinhTt'         => $app->noi_sinh_tt,
             'NoiSinhChiTiet'   => $app->noi_sinh_chi_tiet,
             'NoiDangKyKhaiSinhPx' => $app->noi_dang_ky_khai_sinh_px,
-            'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,          
+            'NoiDangKyKhaiSinhTt' => $app->noi_dang_ky_khai_sinh_tt,
             'QueQuan'           => $app->que_quan,
             'QueQuanPx'         => $app->que_quan_px,
             'QueQuanTt'         => $app->que_quan_tt,
@@ -203,13 +215,13 @@ class AdmissionService
             'Ngay'              => Carbon::parse($app->created_at)->format('d'),
             'Thang'             => Carbon::parse($app->created_at)->format('m'),
             'Nam'               => Carbon::parse($app->created_at)->format('Y'),
-            'NguoiLamDon'       => $app->nguoi_lam_don  ?? '' ,
+            'NguoiLamDon'       => $app->nguoi_lam_don  ?? '',
         ];
         $data['THUONG'] = $app->loai_lop_dang_ky === 'Lớp thường' ? '☑' : '☐';
         $data['TCTA'] = $app->loai_lop_dang_ky === 'Tăng cường Tiếng Anh' ? '☑' : '☐';
         $data['TH'] = $app->loai_lop_dang_ky === 'Tích hợp' ? '☑' : '☐';
-        $data['TATOAN'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐'; 
-        $data['kn1'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐'; 
+        $data['TATOAN'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐';
+        $data['kn1'] = $app->loai_lop_dang_ky === 'Tăng cường TA + Toán và Khoa học' ? '☑' : '☐';
         // dd($data);
 
         $options = [
@@ -224,13 +236,15 @@ class AdmissionService
             $skills = array_map('trim', explode(',', $app->kha_nang_hoc_sinh));
         } elseif (is_array($app->kha_nang_hoc_sinh)) {
             $skills = $app->kha_nang_hoc_sinh;
-         } else {
+        } else {
             $skills = [];
         }
-     
+
         foreach ($options as $key => $label) {
             $data[$key] = in_array($label, $skills) ? '☑' : '☐';
         }
+       
+
         return $data;
     }
 
@@ -275,11 +289,30 @@ class AdmissionService
         }
 
         $template = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+         // tạo URL QR
+
+        $url = route('admission.search', [
+            'ma_dinh_danh' => $app->ma_dinh_danh,
+            'password' => $app->ngay_sinh
+                ? Carbon::parse($app->ngay_sinh)->format('dmY')
+                : '',
+        ]);
+
+        // tạo QR image
+
+        $qrPath  = $this->generateQrImage($url);
 
         // replace dữ liệu
-        $template->setValue('HoVaTenHocSinh', $app->ho_va_ten_hoc_sinh); 
+        $template->setValue('HoVaTenHocSinh', $app->ho_va_ten_hoc_sinh);
         $template->setValue('NgaySinh', $app->ngay_sinh ? Carbon::parse($app->ngay_sinh)->format('d/m/Y') : '');
         $template->setValue('MaHoSo', $app->mhs);
+        // replace QR image
+        $template->setImageValue('QR_CODE', [
+            'path' => $qrPath,
+            'width' => 120,
+            'height' => 120,
+            'ratio' => false
+        ]);
 
         $template->saveAs($tempFile);
 

@@ -18,7 +18,7 @@
     </div>
 
     {{-- Cam kết --}} 
-    <div class="grid md:grid-cols-2 gap-4">
+    {{-- <div class="grid md:grid-cols-2 gap-4">
 
         @foreach ([
             'CK_GocHocTap' => 'Có góc học tập',
@@ -34,7 +34,7 @@
 
         @endforeach
 
-    </div>
+    </div> --}}
 
     {{-- Người làm đơn --}}
     <div>
