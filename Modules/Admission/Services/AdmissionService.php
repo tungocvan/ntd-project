@@ -275,84 +275,86 @@ class AdmissionService
     }
 
     public function generateBienNhan($app)
-{
-    $templatePath = storage_path('app/templates/bien-nhan.docx');
+    {
+        $templatePath = storage_path('app/templates/bien-nhan.docx');
 
-    if (!file_exists($templatePath)) {
-        abort(500, 'Không tìm thấy file template');
+        if (!file_exists($templatePath)) {
+            abort(500, 'Không tìm thấy file template');
+        }
+
+        // ======================
+        // TEMP FILE
+        // ======================
+        $fileName = 'bien-nhan-' . $app->id . '.docx';
+        $tempDir = storage_path('app/temp');
+
+        if (!file_exists($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $tempFile = $tempDir . '/' . $fileName;
+
+        // ======================
+        // QR URL
+        // ======================
+        $url = route('admission.search', array_filter([
+            'ma_dinh_danh' => $app->ma_dinh_danh ?? null,
+            'password' => $app->ngay_sinh
+                ? Carbon::parse($app->ngay_sinh)->format('dmY')
+                : null,
+        ]));
+
+        // ======================
+        // GENERATE QR IMAGE
+        // ======================
+        $qrResult = Builder::create()
+            ->writer(new PngWriter())
+            ->data($url)
+            ->size(300)
+            ->margin(10)
+            ->build();
+
+        // lưu QR file tạm
+        $qrFileName = 'qr_' . $app->id . '.png';
+        $qrPath = $tempDir . '/' . $qrFileName;
+
+        $qrResult->saveToFile($qrPath);
+
+        // ======================
+        // LOAD TEMPLATE WORD
+        // ======================
+        $template = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+        // ======================
+        // REPLACE TEXT
+        // ======================
+        $template->setValue('HoVaTenHocSinh', $app->ho_va_ten_hoc_sinh);
+        $template->setValue(
+            'NgaySinh',
+            $app->ngay_sinh
+                ? Carbon::parse($app->ngay_sinh)->format('d/m/Y')
+                : ''
+        );
+        $template->setValue('MaHoSo', $app->mhs);
+
+        // ======================
+        // INSERT QR IMAGE
+        // ======================
+        $template->setImageValue('QR_CODE', [
+            'path' => $qrPath,
+            'width' => 120,
+            'height' => 120,
+            'ratio' => false,
+        ]);
+
+        // ======================
+        // SAVE WORD FILE
+        // ======================
+        $template->saveAs($tempFile);
+
+        // ======================
+        // RETURN DOWNLOAD
+        // ======================
+        return response()->download($tempFile)->deleteFileAfterSend(true);
     }
-
-    // ======================
-    // TEMP FILE
-    // ======================
-    $fileName = 'bien-nhan-' . $app->id . '.docx';
-    $tempDir = storage_path('app/temp');
-
-    if (!file_exists($tempDir)) {
-        mkdir($tempDir, 0777, true);
-    }
-
-    $tempFile = $tempDir . '/' . $fileName;
-
-    // ======================
-    // QR URL
-    // ======================
-    $url = route('admission.search', [
-        'ma_dinh_danh' => $app->ma_dinh_danh,
-        'password' => $app->ngay_sinh
-            ? Carbon::parse($app->ngay_sinh)->format('dmY')
-            : '',
-    ]);
-
-    // ======================
-    // GENERATE QR IMAGE
-    // ======================
-    $qrResult = Builder::create()
-        ->writer(new PngWriter())
-        ->data($url)
-        ->size(300)
-        ->margin(10)
-        ->build();
-
-    // lưu QR file tạm
-    $qrFileName = 'qr_' . $app->id . '.png';
-    $qrPath = $tempDir . '/' . $qrFileName;
-
-    $qrResult->saveToFile($qrPath);
-
-    // ======================
-    // LOAD TEMPLATE WORD
-    // ======================
-    $template = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
-
-    // ======================
-    // REPLACE TEXT
-    // ======================
-    $template->setValue('HoVaTenHocSinh', $app->ho_va_ten_hoc_sinh);
-    $template->setValue('NgaySinh', $app->ngay_sinh
-        ? Carbon::parse($app->ngay_sinh)->format('d/m/Y')
-        : ''
-    );
-    $template->setValue('MaHoSo', $app->mhs);
-
-    // ======================
-    // INSERT QR IMAGE
-    // ======================
-    $template->setImageValue('QR_CODE', [
-        'path' => $qrPath,
-        'width' => 120,
-        'height' => 120,
-        'ratio' => false,
-    ]);
-
-    // ======================
-    // SAVE WORD FILE
-    // ======================
-    $template->saveAs($tempFile);
-
-    // ======================
-    // RETURN DOWNLOAD
-    // ======================
-    return response()->download($tempFile)->deleteFileAfterSend(true);
-}
 }
