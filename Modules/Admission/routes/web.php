@@ -39,6 +39,14 @@ Route::middleware(['web','auth:admin'])
     ->name('download');
     Route::get('/{id}/receipt', [AdmissionController::class, 'receipt'])
     ->name('receipt');
+});
+
+Route::middleware(['web'])
+    ->prefix('/admission')
+    ->name('admission.')
+    ->group(function () {   
+    Route::get('/search/{ma_dinh_danh?}/{password?}', [AdmissionController::class, 'search'])
+    ->name('search');
 
 });
 
