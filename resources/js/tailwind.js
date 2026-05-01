@@ -2,4 +2,4 @@
 // import 'flowbite';
 
 console.log('Tailwind JS loaded, Laravel Echo');
-import './echo';
+import '../../socket/echo.js';
