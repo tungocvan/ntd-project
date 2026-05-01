@@ -9,6 +9,7 @@ class Search extends Component
 {
     public $MaDinhDanh = '';
     public $password = '';
+    public $app = [];
 
     public $showModal = false;
     public $message = null;
@@ -18,7 +19,10 @@ class Search extends Component
         // 👉 nếu không có param => rỗng luôn, không lỗi
         $this->MaDinhDanh = $ma_dinh_danh ?? '';
         $this->password = $password ?? '';
-
+        $this->app = AdmissionApplication::where('ma_dinh_danh', $ma_dinh_danh)
+            ->firstOrFail()
+            ->toArray();
+      //  dd($this->app);
         // 👉 chỉ auto check nếu có đủ dữ liệu
         if (!empty($this->MaDinhDanh) && !empty($this->password)) {
             $this->login();
