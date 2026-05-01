@@ -141,6 +141,7 @@ class AdmissionService
 
         QrCode::format('png')
             ->size(300)
+            ->errorCorrection('H')
             ->generate($url, $path);
 
         return $path;
