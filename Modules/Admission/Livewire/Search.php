@@ -19,6 +19,9 @@ class Search extends Component
         // 👉 nếu không có param => rỗng luôn, không lỗi
         $this->MaDinhDanh = $ma_dinh_danh ?? '';
         $this->password = $password ?? '';
+        if (empty($this->ma_dinh_danh) || empty($this->password)) {
+            return;
+        }
         $this->app = AdmissionApplication::where('ma_dinh_danh', $ma_dinh_danh)
             ->firstOrFail()
             ->toArray();

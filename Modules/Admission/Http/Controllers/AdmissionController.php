@@ -55,12 +55,13 @@ class AdmissionController extends Controller
     {
         return view('Admission::pages.admin.dvhc');
     }
-    public function search($ma_dinh_danh = null, $password = null)
+    public function search($ma_dinh_danh = '', $password = '')
     {
+        
         return view('Admission::pages.public.search', [
             'ma_dinh_danh' => $ma_dinh_danh ?? '',
             'password' => $password ?? '',
-        ]);
+        ]); 
     }
 
     /**

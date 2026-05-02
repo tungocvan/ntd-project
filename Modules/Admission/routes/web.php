@@ -3,6 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Admission\Http\Controllers\AdmissionController;
 
+Route::middleware(['web'])
+    ->prefix('/admission')
+    ->name('admission.')
+    ->group(function () {
+        Route::get('/search/{ma_dinh_danh?}/{password?}', [AdmissionController::class, 'search'])->name('search');
+         
+    });
+
 
 Route::middleware(['web', 'auth:admin'])->group(function () {
     //Route::get('/', [AdmissionController::class, 'adminIndex'])->name('admin.dashboard');
@@ -30,9 +38,8 @@ Route::middleware(['web', 'auth:admin'])
     ->prefix('/admission')
     ->name('admission.')
     ->group(function () {
-        Route::get('/register', [AdmissionController::class, 'index'])->name('register');
-        Route::get('/search/{ma_dinh_danh?}/{password?}', [AdmissionController::class, 'search'])
-            ->name('search');
+        Route::get('/register', [AdmissionController::class, 'index'])->name('register');       
+       
         Route::get('/download-pdf/{id}', [AdmissionController::class, 'downloadPdf'])->name('download-pdf');
         Route::get('/download-word/{id}', [AdmissionController::class, 'downloadDocx'])->name('download-word');
         Route::get('/{id}/download/{type}', [AdmissionController::class, 'download'])
@@ -41,10 +48,3 @@ Route::middleware(['web', 'auth:admin'])
             ->name('receipt');
     });
 
-Route::middleware(['web'])
-    ->prefix('/admission')
-    ->name('admission.')
-    ->group(function () {
-        Route::get('/search/{ma_dinh_danh?}/{password?}', [AdmissionController::class, 'search'])
-            ->name('search');
-    });

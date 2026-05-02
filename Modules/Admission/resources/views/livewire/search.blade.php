@@ -8,7 +8,7 @@
                 Mã định danh <span class="text-rose-500">*</span>
             </label>
 
-            <input type="text" maxlength="12" inputmode="numeric" wire:model.defer="MaDinhDanh"
+            <input type="text" maxlength="12" inputmode="numeric" wire:model="MaDinhDanh"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                 class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
         </div>
@@ -19,7 +19,7 @@
                 Mật khẩu (ddmmyyyy)
             </label>
 
-            <input wire:model.defer="password" type="password"
+            <input wire:model="password" type="password"
                 class="w-full rounded-xl border border-gray-300 px-4 py-3 mt-1 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
                 placeholder="••••••••">
         </div>

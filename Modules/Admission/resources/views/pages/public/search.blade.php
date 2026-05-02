@@ -24,7 +24,7 @@
                         </p>
                     </div>
                 </div>
-
+                  
                 {{-- FORM --}}
                 <livewire:admission.search :ma_dinh_danh="$ma_dinh_danh" :password="$password" />
 
