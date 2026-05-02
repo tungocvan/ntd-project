@@ -16,7 +16,7 @@ class Index extends Component
     public $search = '';
     public $filterStatus = '';
     public $filterClass = '';
-
+ 
     public $perPage = 10;
 
     public $selected = []; 

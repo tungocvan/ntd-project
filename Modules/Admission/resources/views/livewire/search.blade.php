@@ -137,7 +137,7 @@
                     <table class="w-full text-sm md:text-base">
                         <tr>
                             <td class="w-40 md:w-44 py-2">➤ Lớp:</td>
-                            <td class="border-b border-white/20">{{ $app['lop'] }}</td>
+                            <td class="border-b border-white/20">{{ $app['lop'] . " - " .  $app['loai_lop_dang_ky']}}</td>
                         </tr>
                         <tr>
                             <td class="py-2">➤ GVCN:</td>
