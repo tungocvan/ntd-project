@@ -157,6 +157,7 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
 
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Học sinh</th>
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Lớp</th>
+                        <th class="px-6 py-4 text-left font-semibold text-gray-600">Loại lớp</th>
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Ngày sinh</th>
                         <th class="px-6 py-4 text-left font-semibold text-gray-600">Trạng thái</th>
                         <th class="px-6 py-4 text-right font-semibold text-gray-600">Thao tác</th>
@@ -180,6 +181,12 @@ focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                                 <div class="text-xs text-gray-500">
                                     {{ $item->ma_dinh_danh }}
                                 </div>
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-600">
+                                <span class="inline-flex px-2.5 py-1 rounded-md text-xs bg-gray-100">
+                                    {{ $item->lop }}
+                                </span>
                             </td>
 
                             <td class="px-6 py-4 text-gray-600">

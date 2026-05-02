@@ -101,6 +101,10 @@ class RegistrationForm extends Component
         'CK_ThamGiaHD' => true,
         'CK_GanGui' => true,
 
+        'Lop' => '',
+        'Gvcn' => '',
+        'BaoMau' => '',
+
         'NgayLamDon' => '',
         'NguoiLamDon' => '',
     ];
@@ -178,7 +182,9 @@ class RegistrationForm extends Component
     //         'CK_HopPH' => true,
     //         'CK_ThamGiaHD' => true,
     //         'CK_GanGui' => true,
-
+                // 'Lop' => '',
+                // 'Gvcn' => '',
+                // 'BaoMau' => '',
     //         'NgayLamDon' => '',
     //         'NguoiLamDon' => 'Trần Thị Mai',
     //     ];
@@ -219,7 +225,7 @@ class RegistrationForm extends Component
             $this->form = [
                 // STEP 1
                 'HoVaTenHocSinh' => $app->ho_va_ten_hoc_sinh,
-                'Status' => 'pending',
+                'Status' => $app->status,
                 'GioiTinh' => $app->gioi_tinh,
                 'NgaySinh' => $app->ngay_sinh ? Carbon::parse($app->ngay_sinh)->format('Y-m-d') : '',
                 'DanToc' => $app->dan_toc ?? 'Kinh',
@@ -293,6 +299,10 @@ class RegistrationForm extends Component
                 'CK_HopPH' => $app->ck_hop_ph ? (bool)$app->ck_hop_ph : true,
                 'CK_ThamGiaHD' => $app->ck_tham_gia_hd ? (bool)$app->ck_tham_gia_hd : true,
                 'CK_GanGui' => $app->ck_gan_gui ? (bool)$app->ck_gan_gui : true,
+
+                'Lop' => $app->lop ?? '',
+                'Gvcn' => $app->gvcn ?? '',
+                'BaoMau' => $app->bao_mau ?? '',
 
                 'NguoiLamDon' => $app->nguoi_lam_don ?? '',
             ];
@@ -470,6 +480,13 @@ class RegistrationForm extends Component
 
             // ================= EDIT / CREATE =================
             if ($this->isEdit) {
+               
+                if($data['Lop'] !=='' && $data['Gvcn'] !=='') {
+                    $data['Status'] = 'approved';
+                }else{
+                    $data['Status'] = 'pending';
+                }
+
                 $application = $service->updateRegistration($this->applicationId, $data);
                 $this->dispatch('show-success-modal', [
                     'name' => $application->ho_va_ten_hoc_sinh,

@@ -85,6 +85,10 @@ class AdmissionApplication extends Model
         'ck_gan_gui',
         'ngay_lam_don',
         'nguoi_lam_don',
+        // Bước 6: sắp xếp lớp
+        'lop',
+        'gvcn',
+        'bao_mau',
         'pdf_path',
         'word_path'
     ];

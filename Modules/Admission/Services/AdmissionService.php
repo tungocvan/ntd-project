@@ -131,6 +131,9 @@ class AdmissionService
             'ck_gan_gui'                => filter_var($formData['CK_GanGui'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'ngay_lam_don'              => !empty($formData['NgayLamDon']) ? Carbon::parse($formData['NgayLamDon'])->format('Y-m-d') : date('Y-m-d'),
             'nguoi_lam_don'             => $formData['NguoiLamDon'] === '' ? $formData['HoTenMe'] : $formData['NguoiLamDon'],
+            'lop'          => $formData['Lop'] ?? '',
+            'gvcn'          => $formData['Gvcn'] ?? '',
+            'bao_mau'          => $formData['BaoMau'] ?? '',
         ];
         // dd($data);
         return $data;

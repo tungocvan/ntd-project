@@ -82,6 +82,12 @@ return new class extends Migration {
             $table->boolean('ck_gan_gui')->default(false);
             $table->string('ngay_lam_don')->nullable();
             $table->string('nguoi_lam_don')->nullable();
+
+            //Phần sắp xếp lớp
+            $table->string('lop')->nullable();
+            $table->string('gvcn')->nullable();
+            $table->string('bao_mau')->nullable();
+
             $table->string('pdf_path')->nullable();
             $table->string('word_path')->nullable();
 

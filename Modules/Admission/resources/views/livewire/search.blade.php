@@ -129,7 +129,7 @@
 
                 {{-- SUB TITLE --}}
                 <div class="text-center font-semibold tracking-wide">
-                    HỌC SINH ĐƯỢC PHÂN VÀO LỚP
+                    HỌC SINH ĐƯỢC SẮP XẾP VÀO LỚP
                 </div>
 
                 {{-- CLASS TABLE --}}
@@ -137,15 +137,15 @@
                     <table class="w-full text-sm md:text-base">
                         <tr>
                             <td class="w-40 md:w-44 py-2">➤ Lớp:</td>
-                            <td class="border-b border-white/20"></td>
+                            <td class="border-b border-white/20">{{ $app['lop'] }}</td>
                         </tr>
                         <tr>
                             <td class="py-2">➤ GVCN:</td>
-                            <td class="border-b border-white/20"></td>
+                            <td class="border-b border-white/20">{{ $app['gvcn'] }}</td>
                         </tr>
                         <tr>
                             <td class="py-2">➤ Bảo mẫu:</td>
-                            <td class="border-b border-white/20"></td>
+                            <td class="border-b border-white/20">{{ $app['bao_mau'] }}</td>
                         </tr>
                     </table>
                 </div>

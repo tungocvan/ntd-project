@@ -47,6 +47,10 @@ class AdmissionController extends Controller
     {
         return view('Admission::pages.dashboard');
     }
+    public function listClass()
+    {
+        return view('Admission::pages.public.list-class');
+    }
     public function dvhc()
     {
         return view('Admission::pages.admin.dvhc');
